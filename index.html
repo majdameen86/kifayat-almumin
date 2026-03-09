@@ -1753,7 +1753,7 @@ footer{
 <!-- TOAST -->
 <div style="position:fixed;bottom:90px;right:24px;z-index:300" id="toast-wrap">
   <div id="main-toast" style="background:#0e1a12;border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:10px;font-size:14px;color:white;box-shadow:0 10px 40px rgba(0,0,0,0.4);transform:translateY(100px);opacity:0;transition:all .3s">
-    <span class="ic" style="color:#2dc77a;font-size:18px">✅</span>
+    <span id="toast-icon" style="color:#2dc77a;font-size:18px">✅</span>
     <span id="toast-text">تم</span>
   </div>
 </div>
@@ -2034,9 +2034,15 @@ function doSearch() {
 function showToast(msg, type='success') {
   const t = document.getElementById('main-toast');
   const icon = document.getElementById('toast-icon');
-  document.getElementById('toast-text').textContent = msg;
-  icon.className = `fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'}`;
-  icon.style.color = type==='success' ? '#2dc77a' : '#e05252';
+  const text = document.getElementById('toast-text');
+  if (!t || !text) return;
+  if (text) text.textContent = msg;
+  if (icon) {
+    icon.textContent = type === 'success' ? '✅' : '⚠️';
+    icon.style.color = type === 'success' ? '#2dc77a' : '#e05252';
+    icon.style.fontSize = '18px';
+    icon.className = '';
+  }
   t.style.transform = 'translateY(0)';
   t.style.opacity = '1';
   setTimeout(() => { t.style.transform = 'translateY(100px)'; t.style.opacity = '0'; }, 3000);
@@ -2046,10 +2052,12 @@ function showToast(msg, type='success') {
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-// ══ INIT ══
-initBeads();
+// ══ INIT — wait for DOM ══
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  initBeads();
+});
 
 // ════════════════════════════════════════
 //  PRAYER TIMES SYSTEM
