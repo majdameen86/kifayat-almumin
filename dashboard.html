@@ -33,10 +33,8 @@
   --radius: 14px;
   --shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-
 body {
   font-family: 'Tajawal', sans-serif;
   background: var(--bg-dark);
@@ -45,7 +43,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ══════════════════ LOGIN ══════════════════ */
+/* ══════ LOGIN ══════ */
 #login-screen {
   position: fixed; inset: 0; z-index: 1000;
   background: radial-gradient(ellipse at 30% 50%, #0a3d22 0%, #040c06 60%);
@@ -61,10 +59,7 @@ body {
   animation: fadeUp .5s ease;
 }
 @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
-
-.login-logo {
-  text-align: center; margin-bottom: 32px;
-}
+.login-logo { text-align: center; margin-bottom: 32px; }
 .login-logo .icon {
   width: 72px; height: 72px; margin: 0 auto 12px;
   background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
@@ -74,7 +69,6 @@ body {
 }
 .login-logo h1 { font-family: 'Amiri', serif; font-size: 26px; color: var(--gold-light); }
 .login-logo p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
-
 .form-group { margin-bottom: 18px; }
 .form-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
 .form-group input {
@@ -83,10 +77,8 @@ body {
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text-white);
-  font-family: 'Tajawal', sans-serif;
-  font-size: 15px;
-  transition: border-color .2s, box-shadow .2s;
-  outline: none;
+  font-family: 'Tajawal', sans-serif; font-size: 15px;
+  transition: border-color .2s, box-shadow .2s; outline: none;
 }
 .form-group input:focus {
   border-color: var(--emerald-light);
@@ -97,15 +89,15 @@ body {
   background: linear-gradient(135deg, var(--emerald-light), var(--emerald-dark));
   border: none; border-radius: 12px;
   color: white; font-family: 'Tajawal', sans-serif;
-  font-size: 16px; font-weight: 700; cursor: pointer;
-  margin-top: 8px;
+  font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px;
   transition: transform .15s, box-shadow .15s;
   box-shadow: 0 4px 20px rgba(10,102,64,0.4);
 }
 .btn-login:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(10,102,64,0.5); }
 .login-hint { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 16px; }
+.login-error { background: rgba(224,82,82,0.1); border: 1px solid rgba(224,82,82,0.3); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--danger); margin-bottom: 14px; display: none; }
 
-/* ══════════════════ LAYOUT ══════════════════ */
+/* ══════ LAYOUT ══════ */
 #app { display: none; }
 #app.visible { display: flex; min-height: 100vh; }
 
@@ -116,12 +108,10 @@ body {
   border-left: 1px solid var(--border);
   display: flex; flex-direction: column;
   position: fixed; top: 0; right: 0; bottom: 0;
-  z-index: 100;
-  transition: transform .3s ease;
+  z-index: 100; transition: transform .3s ease;
 }
 .sidebar-header {
-  padding: 24px 20px;
-  border-bottom: 1px solid var(--border);
+  padding: 24px 20px; border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 12px;
 }
 .sidebar-logo {
@@ -133,7 +123,6 @@ body {
 }
 .sidebar-title h2 { font-family: 'Amiri', serif; font-size: 17px; color: var(--gold-light); line-height: 1.2; }
 .sidebar-title span { font-size: 11px; color: var(--text-muted); }
-
 .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 12px; }
 .nav-section { margin-bottom: 20px; }
 .nav-section-title {
@@ -156,24 +145,12 @@ body {
   border: 1px solid rgba(10,102,64,0.3);
 }
 .nav-item.active::before {
-  content: '';
-  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
   width: 3px; height: 60%; background: var(--emerald-glow);
   border-radius: 2px 0 0 2px;
 }
 .nav-item i { width: 18px; text-align: center; font-size: 15px; }
-.nav-badge {
-  margin-right: auto;
-  background: var(--emerald-dark);
-  color: var(--emerald-glow);
-  font-size: 10px; font-weight: 700;
-  padding: 2px 7px; border-radius: 20px;
-}
-
-.sidebar-footer {
-  padding: 16px 12px;
-  border-top: 1px solid var(--border);
-}
+.sidebar-footer { padding: 16px 12px; border-top: 1px solid var(--border); }
 .user-card {
   display: flex; align-items: center; gap: 10px;
   padding: 10px; border-radius: 10px;
@@ -190,17 +167,12 @@ body {
 .user-info span { font-size: 11px; color: var(--text-muted); }
 .btn-logout {
   background: none; border: none; color: var(--text-muted);
-  cursor: pointer; padding: 4px; border-radius: 6px;
-  transition: color .2s;
+  cursor: pointer; padding: 4px; border-radius: 6px; transition: color .2s;
 }
 .btn-logout:hover { color: var(--danger); }
 
 /* MAIN */
-.main {
-  margin-right: var(--sidebar-w);
-  flex: 1; display: flex; flex-direction: column;
-  min-height: 100vh;
-}
+.main { margin-right: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
 
 /* TOPBAR */
 .topbar {
@@ -212,10 +184,7 @@ body {
   padding: 0 28px; gap: 16px;
   position: sticky; top: 0; z-index: 50;
 }
-.menu-toggle {
-  display: none; background: none; border: none;
-  color: var(--text-muted); font-size: 20px; cursor: pointer;
-}
+.menu-toggle { display: none; background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
 .topbar-title { font-size: 17px; font-weight: 700; }
 .topbar-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
 .topbar-actions { margin-right: auto; display: flex; align-items: center; gap: 12px; }
@@ -228,18 +197,9 @@ body {
   font-size: 15px; transition: all .18s; position: relative;
 }
 .btn-icon:hover { background: rgba(10,102,64,0.2); color: var(--text-white); border-color: var(--emerald); }
-.notif-dot {
-  position: absolute; top: 6px; left: 6px;
-  width: 8px; height: 8px; background: var(--emerald-glow);
-  border-radius: 50%; border: 2px solid var(--bg-dark);
-}
 
 /* PAGE CONTENT */
-.page-content {
-  padding: 28px;
-  flex: 1;
-  display: none;
-}
+.page-content { padding: 28px; flex: 1; display: none; }
 .page-content.active { display: block; animation: fadeIn .25s ease; }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
@@ -252,61 +212,33 @@ body {
 .section-header p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 
 /* STATS GRID */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px; margin-bottom: 28px;
-}
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
 .stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px;
   position: relative; overflow: hidden;
   transition: transform .2s, border-color .2s;
 }
 .stat-card:hover { transform: translateY(-2px); border-color: rgba(10,102,64,0.5); }
-.stat-card::before {
-  content: ''; position: absolute;
-  top: 0; left: 0; right: 0; height: 2px;
-}
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
 .stat-card.green::before { background: linear-gradient(90deg, var(--emerald-glow), transparent); }
 .stat-card.gold::before { background: linear-gradient(90deg, var(--gold), transparent); }
 .stat-card.blue::before { background: linear-gradient(90deg, var(--info), transparent); }
 .stat-card.red::before { background: linear-gradient(90deg, var(--danger), transparent); }
-.stat-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; margin-bottom: 14px;
-}
+.stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
 .stat-icon.green { background: rgba(45,199,122,0.12); color: var(--success); }
 .stat-icon.gold { background: rgba(200,168,75,0.12); color: var(--gold-light); }
 .stat-icon.blue { background: rgba(42,157,212,0.12); color: var(--info); }
 .stat-icon.red { background: rgba(224,82,82,0.12); color: var(--danger); }
 .stat-val { font-size: 28px; font-weight: 900; line-height: 1; }
 .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
-.stat-change { font-size: 11px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
-.stat-change.up { color: var(--success); }
-.stat-change.down { color: var(--danger); }
 
 /* CARDS */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.card-header {
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.card-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .card-header h3 { font-size: 15px; font-weight: 700; }
 .card-body { padding: 22px; }
-
-/* GRID 2 */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
 
 /* TABLE */
 .table-wrap { overflow-x: auto; }
@@ -317,10 +249,7 @@ th {
   text-transform: uppercase; letter-spacing: 0.8px;
   border-bottom: 1px solid var(--border);
 }
-td {
-  padding: 13px 14px; border-bottom: 1px solid rgba(255,255,255,0.04);
-  vertical-align: middle;
-}
+td { padding: 13px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: rgba(10,102,64,0.06); }
 .td-title { font-weight: 600; color: var(--text-white); }
@@ -345,27 +274,18 @@ tr:hover td { background: rgba(10,102,64,0.06); }
   font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 600;
   cursor: pointer; border: none; transition: all .18s;
 }
-.btn-primary {
-  background: linear-gradient(135deg, var(--emerald-light), var(--emerald-dark));
-  color: white; box-shadow: 0 4px 15px rgba(10,102,64,0.35);
-}
+.btn-primary { background: linear-gradient(135deg, var(--emerald-light), var(--emerald-dark)); color: white; box-shadow: 0 4px 15px rgba(10,102,64,0.35); }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(10,102,64,0.5); }
-.btn-gold {
-  background: linear-gradient(135deg, var(--gold), #8a6e28);
-  color: white;
-}
-.btn-outline {
-  background: transparent; color: var(--text-muted);
-  border: 1px solid var(--border);
-}
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-gold { background: linear-gradient(135deg, var(--gold), #8a6e28); color: white; }
+.btn-outline { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
 .btn-outline:hover { border-color: var(--emerald); color: var(--text-white); }
 .btn-danger { background: rgba(224,82,82,0.15); color: var(--danger); border: 1px solid rgba(224,82,82,0.2); }
+.btn-danger:hover { background: rgba(224,82,82,0.25); }
 .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
-
-/* ACTION BTNS */
 .action-btns { display: flex; gap: 6px; }
 
-/* FORM ELEMENTS */
+/* FORM */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .form-field { margin-bottom: 16px; }
 .form-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -388,46 +308,31 @@ tr:hover td { background: rgba(10,102,64,0.06); }
 .upload-zone {
   border: 2px dashed var(--border);
   border-radius: 12px; padding: 32px;
-  text-align: center; cursor: pointer;
-  transition: all .2s;
+  text-align: center; cursor: pointer; transition: all .2s;
+  position: relative; overflow: hidden;
 }
 .upload-zone:hover { border-color: var(--emerald-light); background: rgba(10,102,64,0.05); }
-.upload-zone i { font-size: 36px; color: var(--text-muted); margin-bottom: 10px; }
+.upload-zone i { font-size: 36px; color: var(--text-muted); margin-bottom: 10px; display: block; }
 .upload-zone p { font-size: 13px; color: var(--text-muted); }
 .upload-zone span { font-size: 11px; color: var(--text-muted); opacity: 0.6; }
+.upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.upload-preview { font-size: 12px; color: var(--emerald-glow); margin-top: 8px; font-weight: 600; }
 
 /* TOGGLE SWITCH */
 .toggle-wrap { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
 .toggle-wrap:last-child { border-bottom: none; }
 .toggle-info strong { display: block; font-size: 14px; font-weight: 600; }
 .toggle-info span { font-size: 12px; color: var(--text-muted); }
-.toggle {
-  position: relative; width: 46px; height: 26px;
-  flex-shrink: 0;
-}
+.toggle { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
 .toggle input { opacity: 0; width: 0; height: 0; }
-.toggle-slider {
-  position: absolute; inset: 0;
-  background: rgba(255,255,255,0.1);
-  border-radius: 26px; cursor: pointer;
-  transition: .3s;
-}
-.toggle-slider:before {
-  content: ''; position: absolute;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: white; top: 3px; right: 3px;
-  transition: .3s; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
+.toggle-slider { position: absolute; inset: 0; background: rgba(255,255,255,0.1); border-radius: 26px; cursor: pointer; transition: .3s; }
+.toggle-slider:before { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; top: 3px; right: 3px; transition: .3s; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
 .toggle input:checked + .toggle-slider { background: var(--emerald-light); }
 .toggle input:checked + .toggle-slider:before { transform: translateX(-20px); }
 
 /* COLOR PICKER */
 .color-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
-.color-swatch {
-  width: 36px; height: 36px; border-radius: 10px;
-  cursor: pointer; border: 2px solid transparent;
-  transition: transform .15s, border-color .15s;
-}
+.color-swatch { width: 36px; height: 36px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; transition: transform .15s, border-color .15s; }
 .color-swatch:hover { transform: scale(1.15); }
 .color-swatch.selected { border-color: white; transform: scale(1.1); }
 
@@ -440,26 +345,16 @@ tr:hover td { background: rgba(10,102,64,0.06); }
 .chart-bar-fill { height: 100%; border-radius: 10px; transition: width 1s ease; }
 
 /* ACTIVITY FEED */
-.activity-item {
-  display: flex; gap: 12px; padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
+.activity-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
 .activity-item:last-child { border-bottom: none; }
-.activity-dot {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px; flex-shrink: 0; margin-top: 2px;
-}
+.activity-dot { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; margin-top: 2px; }
 .activity-content strong { display: block; font-size: 13px; font-weight: 600; }
 .activity-content span { font-size: 11px; color: var(--text-muted); }
 
-/* SETTINGS SECTION */
-.settings-section { margin-bottom: 28px; }
-.settings-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-.settings-section h3 i { color: var(--emerald-glow); }
-
-/* THUMBNAIL */
-.thumb { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+/* SEARCH */
+.search-bar { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 9px 14px; min-width: 240px; }
+.search-bar i { color: var(--text-muted); font-size: 14px; }
+.search-bar input { background: none; border: none; color: var(--text-white); font-family: 'Tajawal', sans-serif; font-size: 13px; outline: none; flex: 1; }
 
 /* MODAL */
 .modal-overlay {
@@ -473,7 +368,7 @@ tr:hover td { background: rgba(10,102,64,0.06); }
   background: var(--bg-card2);
   border: 1px solid var(--border);
   border-radius: 20px; padding: 32px;
-  width: 560px; max-width: 95vw; max-height: 90vh;
+  width: 580px; max-width: 95vw; max-height: 90vh;
   overflow-y: auto; animation: fadeUp .3s ease;
 }
 .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
@@ -481,38 +376,8 @@ tr:hover td { background: rgba(10,102,64,0.06); }
 .modal-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 20px; }
 .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
 
-/* SEARCH */
-.search-bar {
-  display: flex; align-items: center; gap: 10px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: 10px; padding: 9px 14px;
-  min-width: 240px;
-}
-.search-bar i { color: var(--text-muted); font-size: 14px; }
-.search-bar input {
-  background: none; border: none; color: var(--text-white);
-  font-family: 'Tajawal', sans-serif; font-size: 13px;
-  outline: none; flex: 1;
-}
-
-/* PROGRESS */
-.progress-ring { display: flex; align-items: center; justify-content: center; margin: 8px 0; }
-.donut-chart { position: relative; width: 80px; height: 80px; }
-.donut-chart svg { transform: rotate(-90deg); }
-.donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.donut-center strong { font-size: 18px; font-weight: 800; }
-.donut-center span { font-size: 10px; color: var(--text-muted); }
-
-/* AUDIO ITEM */
-.audio-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 12px; background: rgba(255,255,255,0.03);
-  border-radius: 12px; margin-bottom: 8px;
-  border: 1px solid transparent;
-  transition: border-color .2s;
-}
-.audio-item:hover { border-color: var(--border); }
+/* THUMB */
+.thumb { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 20px; }
 
 /* MOBILE */
 .mobile-overlay { display: none; }
@@ -522,7 +387,6 @@ tr:hover td { background: rgba(10,102,64,0.06); }
   .main { margin-right: 0; }
   .menu-toggle { display: flex; }
   .grid-2 { grid-template-columns: 1fr; }
-  .grid-3 { grid-template-columns: 1fr 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .mobile-overlay { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; display: none; }
   .mobile-overlay.open { display: block; }
@@ -530,7 +394,6 @@ tr:hover td { background: rgba(10,102,64,0.06); }
 }
 @media (max-width: 540px) {
   .stats-grid { grid-template-columns: 1fr; }
-  .grid-3 { grid-template-columns: 1fr; }
   .page-content { padding: 16px; }
   .topbar { padding: 0 16px; }
 }
@@ -550,54 +413,57 @@ tr:hover td { background: rgba(10,102,64,0.06); }
 .toast.success i { color: var(--success); }
 .toast.error i { color: var(--danger); }
 
-/* BOOK CARD */
+/* BOOK GRID */
 .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 16px; }
-.book-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px; overflow: hidden;
-  transition: transform .2s, border-color .2s;
-  cursor: pointer;
-}
+.book-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: transform .2s, border-color .2s; }
 .book-card:hover { transform: translateY(-4px); border-color: rgba(10,102,64,0.5); }
-.book-cover {
-  height: 160px; background: linear-gradient(135deg, var(--emerald-dark), #0a3020);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 48px;
-}
+.book-cover { height: 160px; background: linear-gradient(135deg, var(--emerald-dark), #0a3020); display: flex; align-items: center; justify-content: center; font-size: 48px; }
 .book-info { padding: 12px; }
 .book-info strong { display: block; font-size: 12px; font-weight: 700; line-height: 1.3; margin-bottom: 4px; }
 .book-info span { font-size: 11px; color: var(--text-muted); }
 
 /* SHEIKH CARD */
 .sheikh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 16px; }
-.sheikh-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 14px; padding: 20px; text-align: center;
-  transition: transform .2s;
-}
+.sheikh-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; transition: transform .2s; }
 .sheikh-card:hover { transform: translateY(-3px); border-color: rgba(200,168,75,0.3); }
-.sheikh-avatar {
-  width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 12px;
-  background: linear-gradient(135deg, var(--emerald), var(--gold));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; font-weight: 700;
-}
+.sheikh-avatar { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 12px; background: linear-gradient(135deg, var(--emerald), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; }
 .sheikh-card strong { display: block; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
 .sheikh-card span { font-size: 12px; color: var(--text-muted); }
 
-/* SCHEDULE TAG */
-.schedule-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11px; color: var(--warning);
-  background: rgba(232,160,32,0.1);
-  padding: 3px 8px; border-radius: 6px;
+/* LOADING SPINNER */
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+.empty-state i { font-size: 48px; margin-bottom: 16px; display: block; opacity: .3; }
+.empty-state p { font-size: 15px; }
+
+/* CONFIRM DIALOG */
+.confirm-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+  z-index: 400; display: none; align-items: center; justify-content: center;
 }
+.confirm-overlay.open { display: flex; }
+.confirm-box {
+  background: var(--bg-card2); border: 1px solid rgba(224,82,82,0.3);
+  border-radius: 20px; padding: 32px; width: 400px; max-width: 95vw;
+  text-align: center; animation: fadeUp .3s ease;
+}
+.confirm-box i { font-size: 48px; color: var(--danger); margin-bottom: 16px; display: block; }
+.confirm-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.confirm-box p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+.confirm-btns { display: flex; gap: 10px; justify-content: center; }
+
+/* SETTINGS ROW */
+.settings-section { margin-bottom: 28px; }
+.settings-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.settings-section h3 i { color: var(--emerald-glow); }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ══════════════ LOGIN ══════════════ -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
@@ -605,22 +471,23 @@ tr:hover td { background: rgba(10,102,64,0.06); }
       <h1>كفاية المؤمن</h1>
       <p>لوحة تحكم الإدارة</p>
     </div>
+    <div class="login-error" id="login-error"><i class="fas fa-exclamation-circle"></i> <span id="login-error-msg"></span></div>
     <div class="form-group">
       <label>اسم المستخدم</label>
-      <input type="text" id="u" placeholder="admin" value="admin">
+      <input type="text" id="login-user" placeholder="admin" value="admin">
     </div>
     <div class="form-group">
       <label>كلمة المرور</label>
-      <input type="password" id="p" placeholder="••••••••" value="admin123">
+      <input type="password" id="login-pass" placeholder="••••••••" value="admin123">
     </div>
-    <button class="btn-login" onclick="doLogin()">
+    <button class="btn-login" id="login-btn" onclick="doLogin()">
       <i class="fas fa-sign-in-alt"></i> دخول
     </button>
     <p class="login-hint">المستخدم: admin &nbsp;|&nbsp; كلمة المرور: admin123</p>
   </div>
 </div>
 
-<!-- APP -->
+<!-- ══════════════ APP ══════════════ -->
 <div id="app">
 
   <!-- SIDEBAR -->
@@ -632,19 +499,13 @@ tr:hover td { background: rgba(10,102,64,0.06); }
         <span>لوحة التحكم</span>
       </div>
     </div>
-
     <nav class="sidebar-nav">
       <div class="nav-section">
         <div class="nav-section-title">عام</div>
         <div class="nav-item active" onclick="showPage('dashboard',this)">
           <i class="fas fa-chart-pie"></i> لوحة الإحصائيات
         </div>
-        <div class="nav-item" onclick="showPage('activity',this)">
-          <i class="fas fa-bell"></i> الإشعارات
-          <span class="nav-badge">3</span>
-        </div>
       </div>
-
       <div class="nav-section">
         <div class="nav-section-title">المحتوى</div>
         <div class="nav-item" onclick="showPage('audios',this)">
@@ -663,27 +524,25 @@ tr:hover td { background: rgba(10,102,64,0.06); }
           <i class="fas fa-tags"></i> التصنيفات
         </div>
       </div>
-
       <div class="nav-section">
         <div class="nav-section-title">إعدادات</div>
         <div class="nav-item" onclick="showPage('visibility',this)">
-          <i class="fas fa-eye"></i> إظهار / إخفاء الأقسام
+          <i class="fas fa-eye"></i> إظهار / إخفاء
         </div>
         <div class="nav-item" onclick="showPage('settings',this)">
           <i class="fas fa-cog"></i> إعدادات الموقع
         </div>
         <div class="nav-item" onclick="showPage('about',this)">
-          <i class="fas fa-info-circle"></i> صفحة من نحن
+          <i class="fas fa-info-circle"></i> من نحن
         </div>
       </div>
     </nav>
-
     <div class="sidebar-footer">
       <div class="user-card">
         <div class="user-avatar">م</div>
         <div class="user-info">
-          <strong>المدير العام</strong>
-          <span>admin@kifayat.com</span>
+          <strong id="admin-name">المدير العام</strong>
+          <span id="admin-email">admin@kifayat.com</span>
         </div>
         <button class="btn-logout" onclick="doLogout()" title="خروج">
           <i class="fas fa-sign-out-alt"></i>
@@ -700,229 +559,75 @@ tr:hover td { background: rgba(10,102,64,0.06); }
       <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
       <div>
         <div class="topbar-title" id="topbar-title">لوحة الإحصائيات</div>
-        <div class="topbar-subtitle" id="topbar-sub">مرحباً بك في لوحة التحكم</div>
+        <div class="topbar-subtitle" id="topbar-sub">مرحباً بك</div>
       </div>
       <div class="topbar-actions">
-        <div class="btn-icon" onclick="showPage('activity', null)" title="الإشعارات">
-          <i class="fas fa-bell"></i>
-          <span class="notif-dot"></span>
-        </div>
-        <div class="btn-icon" title="معاينة الموقع">
+        <div class="btn-icon" title="معاينة الموقع" onclick="window.open('index.html','_blank')">
           <i class="fas fa-external-link-alt"></i>
         </div>
-        <div class="btn-icon" onclick="showPage('settings', null)" title="الإعدادات">
+        <div class="btn-icon" onclick="showPage('settings',null)" title="الإعدادات">
           <i class="fas fa-cog"></i>
         </div>
       </div>
     </header>
 
-    <!-- ════════ DASHBOARD PAGE ════════ -->
+    <!-- ══ DASHBOARD ══ -->
     <div class="page-content active" id="page-dashboard">
       <div class="section-header">
         <div>
           <h2>مرحباً بك 👋</h2>
-          <p>إليك ملخص أداء الموقع اليوم</p>
+          <p>إليك ملخص أداء الموقع</p>
         </div>
-        <button class="btn btn-primary btn-sm"><i class="fas fa-sync"></i> تحديث</button>
+        <button class="btn btn-primary btn-sm" onclick="loadDashboard()"><i class="fas fa-sync"></i> تحديث</button>
       </div>
-
-      <div class="stats-grid">
-        <div class="stat-card green">
-          <div class="stat-icon green"><i class="fas fa-headphones"></i></div>
-          <div class="stat-val">1,284</div>
-          <div class="stat-label">إجمالي الاستماعات</div>
-          <div class="stat-change up"><i class="fas fa-arrow-up"></i> +12% هذا الأسبوع</div>
-        </div>
-        <div class="stat-card gold">
-          <div class="stat-icon gold"><i class="fas fa-download"></i></div>
-          <div class="stat-val">342</div>
-          <div class="stat-label">تحميلات الكتب</div>
-          <div class="stat-change up"><i class="fas fa-arrow-up"></i> +8% هذا الأسبوع</div>
-        </div>
-        <div class="stat-card blue">
-          <div class="stat-icon blue"><i class="fas fa-eye"></i></div>
-          <div class="stat-val">3,891</div>
-          <div class="stat-label">زيارات الموقع</div>
-          <div class="stat-change up"><i class="fas fa-arrow-up"></i> +23% هذا الشهر</div>
-        </div>
-        <div class="stat-card red">
-          <div class="stat-icon red"><i class="fas fa-microphone-alt"></i></div>
-          <div class="stat-val">47</div>
-          <div class="stat-label">إجمالي التسجيلات</div>
-          <div class="stat-change up"><i class="fas fa-arrow-up"></i> +3 هذا الأسبوع</div>
-        </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card green"><div class="stat-icon green"><i class="fas fa-headphones"></i></div><div class="stat-val" id="stat-listens">—</div><div class="stat-label">إجمالي الاستماعات</div></div>
+        <div class="stat-card gold"><div class="stat-icon gold"><i class="fas fa-download"></i></div><div class="stat-val" id="stat-downloads">—</div><div class="stat-label">تحميلات الكتب</div></div>
+        <div class="stat-card blue"><div class="stat-icon blue"><i class="fas fa-eye"></i></div><div class="stat-val" id="stat-visits">—</div><div class="stat-label">زيارات الموقع</div></div>
+        <div class="stat-card red"><div class="stat-icon red"><i class="fas fa-microphone-alt"></i></div><div class="stat-val" id="stat-audios">—</div><div class="stat-label">إجمالي التسجيلات</div></div>
       </div>
-
       <div class="grid-2">
         <div class="card">
-          <div class="card-header">
-            <h3>أكثر الدروس استماعاً</h3>
-            <span class="badge badge-green">هذا الشهر</span>
-          </div>
+          <div class="card-header"><h3>أكثر الدروس استماعاً</h3></div>
           <div class="card-body">
-            <div class="chart-bar-wrap">
-              <div class="chart-bar-item">
-                <div class="chart-bar-label"><span>شرح الأربعين النووية</span><span>284</span></div>
-                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:85%;background:var(--emerald-glow)"></div></div>
-              </div>
-              <div class="chart-bar-item">
-                <div class="chart-bar-label"><span>تفسير سورة البقرة</span><span>210</span></div>
-                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:65%;background:var(--gold)"></div></div>
-              </div>
-              <div class="chart-bar-item">
-                <div class="chart-bar-label"><span>فقه العبادات</span><span>176</span></div>
-                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:55%;background:var(--info)"></div></div>
-              </div>
-              <div class="chart-bar-item">
-                <div class="chart-bar-label"><span>السيرة النبوية</span><span>142</span></div>
-                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:44%;background:var(--emerald-light)"></div></div>
-              </div>
-              <div class="chart-bar-item">
-                <div class="chart-bar-label"><span>رياض الصالحين</span><span>98</span></div>
-                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:30%;background:var(--danger)"></div></div>
-              </div>
+            <div class="chart-bar-wrap" id="top-audios-chart">
+              <div class="empty-state" style="padding:20px"><i class="fas fa-chart-bar"></i><p>جارٍ التحميل...</p></div>
             </div>
           </div>
         </div>
-
         <div class="card">
-          <div class="card-header">
-            <h3>آخر النشاطات</h3>
-            <button class="btn btn-outline btn-sm">عرض الكل</button>
-          </div>
+          <div class="card-header"><h3>آخر النشاطات</h3></div>
           <div class="card-body" style="padding-top:8px">
-            <div class="activity-item">
-              <div class="activity-dot" style="background:rgba(45,199,122,0.12);color:var(--success)"><i class="fas fa-upload"></i></div>
-              <div class="activity-content">
-                <strong>تم رفع درس جديد</strong>
-                <span>شرح حديث جبريل — الشيخ حسام دياب • منذ ساعة</span>
-              </div>
+            <div id="recent-activity">
+              <div class="empty-state" style="padding:20px"><i class="fas fa-clock"></i><p>جارٍ التحميل...</p></div>
             </div>
-            <div class="activity-item">
-              <div class="activity-dot" style="background:rgba(200,168,75,0.12);color:var(--gold)"><i class="fas fa-book"></i></div>
-              <div class="activity-content">
-                <strong>كتاب جديد في المكتبة</strong>
-                <span>منهاج القاصدين • منذ 3 ساعات</span>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot" style="background:rgba(42,157,212,0.12);color:var(--info)"><i class="fas fa-robot"></i></div>
-              <div class="activity-content">
-                <strong>تحويل نص مكتمل (AI)</strong>
-                <span>درس العقيدة — 45 دقيقة • منذ 5 ساعات</span>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot" style="background:rgba(224,82,82,0.12);color:var(--danger)"><i class="fas fa-moon"></i></div>
-              <div class="activity-content">
-                <strong>تحديث حديث اليوم</strong>
-                <span>تم تحديث بطاقة الحديث اليومي • منذ 8 ساعات</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <h3>أكثر الكتب تحميلاً</h3>
-          <span class="badge badge-gold">هذا الشهر</span>
-        </div>
-        <div class="card-body">
-          <div class="table-wrap">
-            <table>
-              <thead><tr>
-                <th>#</th><th>الكتاب</th><th>المؤلف</th><th>التحميلات</th><th>التقييم</th><th>الحالة</th>
-              </tr></thead>
-              <tbody>
-                <tr><td>1</td><td><div class="td-title">منهاج القاصدين</div></td><td>ابن قدامة المقدسي</td><td><strong>124</strong></td><td>⭐⭐⭐⭐⭐</td><td><span class="badge badge-green">منشور</span></td></tr>
-                <tr><td>2</td><td><div class="td-title">رياض الصالحين</div></td><td>الإمام النووي</td><td><strong>98</strong></td><td>⭐⭐⭐⭐⭐</td><td><span class="badge badge-green">منشور</span></td></tr>
-                <tr><td>3</td><td><div class="td-title">الوابل الصيب</div></td><td>ابن القيم الجوزية</td><td><strong>76</strong></td><td>⭐⭐⭐⭐</td><td><span class="badge badge-green">منشور</span></td></tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ════════ AUDIOS PAGE ════════ -->
+    <!-- ══ AUDIOS ══ -->
     <div class="page-content" id="page-audios">
       <div class="section-header">
         <div><h2>التسجيلات الصوتية</h2><p>إدارة جميع الدروس والمحاضرات</p></div>
-        <button class="btn btn-primary" onclick="openModal('modal-add-audio')">
-          <i class="fas fa-plus"></i> إضافة تسجيل
-        </button>
+        <button class="btn btn-primary" onclick="openModal('modal-audio')"><i class="fas fa-plus"></i> إضافة تسجيل</button>
       </div>
-
       <div class="card" style="margin-bottom:20px">
         <div class="card-body" style="padding:14px 22px">
           <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-            <div class="search-bar" style="flex:1">
-              <i class="fas fa-search"></i>
-              <input type="text" placeholder="البحث في التسجيلات...">
-            </div>
-            <select style="padding:9px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--text-white);font-family:'Tajawal',sans-serif;font-size:13px;outline:none">
-              <option>كل التصنيفات</option>
-              <option>فقه</option><option>تفسير</option><option>عقيدة</option><option>سيرة</option>
-            </select>
-            <select style="padding:9px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--text-white);font-family:'Tajawal',sans-serif;font-size:13px;outline:none">
-              <option>كل الشيوخ</option>
-              <option>الشيخ حسام دياب</option>
-            </select>
+            <div class="search-bar" style="flex:1"><i class="fas fa-search"></i><input type="text" id="audio-search" placeholder="البحث في التسجيلات..." oninput="filterTable('audios-tbody','audio-search')"></div>
           </div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-body" style="padding:0">
           <div class="table-wrap">
             <table>
               <thead><tr>
-                <th></th><th>العنوان</th><th>الشيخ</th><th>المدة</th><th>التصنيف</th><th>النص (AI)</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th>
+                <th></th><th>العنوان</th><th>الشيخ</th><th>المدة</th><th>التصنيف</th><th>الاستماعات</th><th>الحالة</th><th>إجراءات</th>
               </tr></thead>
-              <tbody>
-                <tr>
-                  <td><div class="thumb">🎙</div></td>
-                  <td><div class="td-title">شرح الأربعين النووية — الحديث الأول</div><div class="td-sub">284 استماع • 142 تحميل</div></td>
-                  <td>الشيخ حسام دياب</td>
-                  <td>45:23</td>
-                  <td><span class="badge badge-blue">حديث</span></td>
-                  <td><span class="badge badge-green"><i class="fas fa-check"></i> مكتمل</span></td>
-                  <td>2024/03/01</td>
-                  <td><span class="badge badge-green">منشور</span></td>
-                  <td><div class="action-btns">
-                    <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                  </div></td>
-                </tr>
-                <tr>
-                  <td><div class="thumb">🎙</div></td>
-                  <td><div class="td-title">تفسير سورة البقرة — الجزء الأول</div><div class="td-sub">210 استماع • 89 تحميل</div></td>
-                  <td>الشيخ حسام دياب</td>
-                  <td>1:12:40</td>
-                  <td><span class="badge badge-gold">تفسير</span></td>
-                  <td><span class="badge badge-green"><i class="fas fa-check"></i> مكتمل</span></td>
-                  <td>2024/02/20</td>
-                  <td><span class="badge badge-green">منشور</span></td>
-                  <td><div class="action-btns">
-                    <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                  </div></td>
-                </tr>
-                <tr>
-                  <td><div class="thumb">🎙</div></td>
-                  <td><div class="td-title">فقه العبادات — الطهارة</div><div class="td-sub">176 استماع • 64 تحميل</div></td>
-                  <td>الشيخ حسام دياب</td>
-                  <td>58:10</td>
-                  <td><span class="badge badge-muted">فقه</span></td>
-                  <td><div style="display:flex;align-items:center;gap:6px"><div style="width:60px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px"><div style="width:60%;height:100%;background:var(--warning);border-radius:3px"></div></div><span style="font-size:11px;color:var(--warning)">60%</span></div></td>
-                  <td>2024/03/05</td>
-                  <td><span class="badge badge-gold">مجدول</span></td>
-                  <td><div class="action-btns">
-                    <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                  </div></td>
-                </tr>
+              <tbody id="audios-tbody">
+                <tr><td colspan="8"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -930,91 +635,39 @@ tr:hover td { background: rgba(10,102,64,0.06); }
       </div>
     </div>
 
-    <!-- ════════ BOOKS PAGE ════════ -->
+    <!-- ══ BOOKS ══ -->
     <div class="page-content" id="page-books">
       <div class="section-header">
         <div><h2>مكتبة الكتب</h2><p>إدارة الكتب والمراجع الإسلامية</p></div>
-        <button class="btn btn-primary" onclick="openModal('modal-add-book')">
-          <i class="fas fa-plus"></i> إضافة كتاب
-        </button>
+        <button class="btn btn-primary" onclick="openModal('modal-book')"><i class="fas fa-plus"></i> إضافة كتاب</button>
       </div>
-      <div class="book-grid">
-        <div class="book-card">
-          <div class="book-cover">📖</div>
-          <div class="book-info">
-            <strong>منهاج القاصدين</strong>
-            <span>ابن قدامة</span>
-            <div style="margin-top:8px;display:flex;gap:6px">
-              <button class="btn btn-outline btn-sm" style="flex:1;font-size:11px"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-danger btn-sm" style="flex:1;font-size:11px"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="book-card">
-          <div class="book-cover" style="background:linear-gradient(135deg,#1a3a2a,#0a1f14)">📚</div>
-          <div class="book-info">
-            <strong>رياض الصالحين</strong>
-            <span>الإمام النووي</span>
-            <div style="margin-top:8px;display:flex;gap:6px">
-              <button class="btn btn-outline btn-sm" style="flex:1;font-size:11px"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-danger btn-sm" style="flex:1;font-size:11px"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="book-card">
-          <div class="book-cover" style="background:linear-gradient(135deg,#2a1a0a,#1a0f05)">🕌</div>
-          <div class="book-info">
-            <strong>الوابل الصيب</strong>
-            <span>ابن القيم</span>
-            <div style="margin-top:8px;display:flex;gap:6px">
-              <button class="btn btn-outline btn-sm" style="flex:1;font-size:11px"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-danger btn-sm" style="flex:1;font-size:11px"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="book-card" style="border:2px dashed var(--border);background:transparent;display:flex;align-items:center;justify-content:center;min-height:220px;cursor:pointer" onclick="openModal('modal-add-book')">
-          <div style="text-align:center;color:var(--text-muted)">
-            <i class="fas fa-plus" style="font-size:28px;margin-bottom:8px;display:block"></i>
-            <span style="font-size:13px">إضافة كتاب</span>
-          </div>
-        </div>
+      <div class="book-grid" id="books-grid">
+        <div class="empty-state" style="grid-column:1/-1"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div>
       </div>
     </div>
 
-    <!-- ════════ HADITHS PAGE ════════ -->
+    <!-- ══ HADITHS ══ -->
     <div class="page-content" id="page-hadiths">
       <div class="section-header">
-        <div><h2>الأحاديث والأدعية</h2><p>إدارة بطاقات الأحاديث والأدعية اليومية</p></div>
-        <button class="btn btn-primary" onclick="openModal('modal-add-hadith')">
-          <i class="fas fa-plus"></i> إضافة جديد
-        </button>
+        <div><h2>الأحاديث والأدعية</h2><p>إدارة بطاقات الأحاديث اليومية</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-hadith')"><i class="fas fa-plus"></i> إضافة جديد</button>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>بطاقة حديث اليوم الحالية</h3>
-          <span class="badge badge-green"><i class="fas fa-circle" style="font-size:8px"></i> نشطة الآن</span>
-        </div>
+      <div class="card" style="margin-bottom:20px" id="active-hadith-card">
+        <div class="card-header"><h3>بطاقة حديث اليوم</h3><span class="badge badge-green"><i class="fas fa-circle" style="font-size:8px"></i> نشطة</span></div>
         <div class="card-body">
           <div style="background:linear-gradient(135deg,rgba(10,102,64,0.2),rgba(200,168,75,0.1));border:1px solid var(--border-gold);border-radius:14px;padding:24px;text-align:center">
-            <div style="font-family:'Amiri',serif;font-size:20px;line-height:2;color:var(--gold-light);margin-bottom:16px">
-              «مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللهُ لَهُ طَرِيقًا إِلَى الْجَنَّةِ»
-            </div>
-            <div style="font-size:13px;color:var(--text-muted)">رواه مسلم • صحيح</div>
-          </div>
-          <div style="display:flex;gap:10px;margin-top:16px">
-            <button class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> تعديل</button>
-            <button class="btn btn-outline btn-sm"><i class="fas fa-random"></i> تغيير تلقائي يومياً</button>
+            <div id="active-hadith-text" style="font-family:'Amiri',serif;font-size:20px;line-height:2;color:var(--gold-light)">جارٍ التحميل...</div>
+            <div id="active-hadith-source" style="font-size:13px;color:var(--text-muted);margin-top:8px"></div>
           </div>
         </div>
       </div>
-      <div style="margin-top:20px" class="card">
+      <div class="card">
         <div class="card-body" style="padding:0">
           <div class="table-wrap">
             <table>
               <thead><tr><th>النص</th><th>المصدر</th><th>النوع</th><th>الحالة</th><th>إجراءات</th></tr></thead>
-              <tbody>
-                <tr><td style="max-width:300px"><div class="td-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا...</div></td><td>مسلم</td><td><span class="badge badge-blue">حديث</span></td><td><span class="badge badge-green">نشط</span></td><td><div class="action-btns"><button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></td></tr>
-                <tr><td style="max-width:300px"><div class="td-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">اللهم إني أسألك العفو والعافية...</div></td><td>أبو داود</td><td><span class="badge badge-gold">دعاء</span></td><td><span class="badge badge-muted">غير نشط</span></td><td><div class="action-btns"><button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></td></tr>
+              <tbody id="hadiths-tbody">
+                <tr><td colspan="5"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -1022,259 +675,140 @@ tr:hover td { background: rgba(10,102,64,0.06); }
       </div>
     </div>
 
-    <!-- ════════ SHEIKHS PAGE ════════ -->
+    <!-- ══ SHEIKHS ══ -->
     <div class="page-content" id="page-sheikhs">
       <div class="section-header">
-        <div><h2>الشيوخ</h2><p>إدارة قائمة الشيوخ والمحاضرين</p></div>
-        <button class="btn btn-primary" onclick="openModal('modal-add-sheikh')">
-          <i class="fas fa-plus"></i> إضافة شيخ
-        </button>
+        <div><h2>الشيوخ</h2><p>إدارة المحاضرين</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-sheikh')"><i class="fas fa-plus"></i> إضافة شيخ</button>
       </div>
-      <div class="sheikh-grid">
-        <div class="sheikh-card">
-          <div class="sheikh-avatar">ح</div>
-          <strong>الشيخ حسام دياب</strong>
-          <span>47 درساً</span>
-          <div style="margin-top:12px;display:flex;gap:6px;justify-content:center">
-            <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-          </div>
-        </div>
-        <div class="sheikh-card" style="border:2px dashed var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;min-height:180px" onclick="openModal('modal-add-sheikh')">
-          <div style="text-align:center;color:var(--text-muted)">
-            <i class="fas fa-plus" style="font-size:24px;margin-bottom:8px;display:block"></i>
-            <span style="font-size:13px">إضافة شيخ</span>
-          </div>
-        </div>
+      <div class="sheikh-grid" id="sheikhs-grid">
+        <div class="empty-state" style="grid-column:1/-1"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div>
       </div>
     </div>
 
-    <!-- ════════ CATEGORIES PAGE ════════ -->
+    <!-- ══ CATEGORIES ══ -->
     <div class="page-content" id="page-categories">
       <div class="section-header">
         <div><h2>التصنيفات</h2><p>تنظيم المحتوى حسب الموضوع</p></div>
-        <button class="btn btn-primary" onclick="addCategory()">
-          <i class="fas fa-plus"></i> إضافة تصنيف
-        </button>
+        <button class="btn btn-primary" onclick="openModal('modal-category')"><i class="fas fa-plus"></i> إضافة تصنيف</button>
       </div>
       <div class="card">
-        <div class="card-body">
-          <div id="categories-list">
-            <div class="toggle-wrap" style="border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:8px">
-              <div class="toggle-info"><strong>🎓 الفقه</strong><span>12 درساً</span></div>
-              <div class="action-btns">
-                <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
-            <div class="toggle-wrap" style="border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:8px">
-              <div class="toggle-info"><strong>📖 التفسير</strong><span>8 دروس</span></div>
-              <div class="action-btns">
-                <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
-            <div class="toggle-wrap" style="border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:8px">
-              <div class="toggle-info"><strong>🌙 العقيدة</strong><span>15 درساً</span></div>
-              <div class="action-btns">
-                <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
-            <div class="toggle-wrap" style="border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:8px">
-              <div class="toggle-info"><strong>🕌 السيرة النبوية</strong><span>10 دروس</span></div>
-              <div class="action-btns">
-                <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
-          </div>
+        <div class="card-body" id="categories-list">
+          <div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div>
         </div>
       </div>
     </div>
 
-    <!-- ════════ VISIBILITY PAGE ════════ -->
+    <!-- ══ VISIBILITY ══ -->
     <div class="page-content" id="page-visibility">
       <div class="section-header">
-        <div><h2>إظهار / إخفاء الأقسام</h2><p>تحكم كامل بما يظهر للزوار</p></div>
-        <button class="btn btn-primary btn-sm" onclick="showToast('تم حفظ الإعدادات','success')"><i class="fas fa-save"></i> حفظ</button>
+        <div><h2>إظهار / إخفاء الأقسام</h2><p>تحكم بما يظهر للزوار</p></div>
+        <button class="btn btn-primary btn-sm" id="save-visibility-btn" onclick="saveVisibilitySettings()"><i class="fas fa-save"></i> حفظ</button>
       </div>
-
       <div class="grid-2">
         <div class="card">
           <div class="card-header"><h3><i class="fas fa-th-large" style="color:var(--emerald-glow)"></i> أقسام الصفحة الرئيسية</h3></div>
           <div class="card-body">
-            <div class="toggle-wrap"><div class="toggle-info"><strong>بطاقة حديث اليوم</strong><span>تعرض حديثاً أو دعاءً يومياً</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>أحدث التسجيلات</strong><span>آخر الدروس المرفوعة</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>أحدث الكتب</strong><span>آخر الكتب المضافة</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>الدروس الأكثر استماعاً</strong><span>قسم المميزات</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>بطاقة حديث اليوم</strong><span>يومياً</span></div><label class="toggle"><input type="checkbox" id="toggle-hadith-card" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>أحدث التسجيلات</strong><span>آخر الدروس</span></div><label class="toggle"><input type="checkbox" id="toggle-latest-audios" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>أحدث الكتب</strong><span>آخر الكتب</span></div><label class="toggle"><input type="checkbox" id="toggle-latest-books" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>الدروس الأكثر استماعاً</strong></div><label class="toggle"><input type="checkbox" id="toggle-top-audios" checked><span class="toggle-slider"></span></label></div>
           </div>
         </div>
-
-        <div class="card">
-          <div class="card-header"><h3><i class="fas fa-bars" style="color:var(--gold)"></i> الأقسام الرئيسية</h3></div>
-          <div class="card-body">
-            <div class="toggle-wrap"><div class="toggle-info"><strong>قسم التسجيلات الصوتية</strong><span>صفحة الدروس والمحاضرات</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>مكتبة الكتب</strong><span>صفحة الكتب والمراجع</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>صفحة الشيوخ</strong><span>قائمة المحاضرين</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>صفحة من نحن</strong><span>معلومات المؤسسة</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          </div>
-        </div>
-
         <div class="card">
           <div class="card-header"><h3><i class="fas fa-star-and-crescent" style="color:var(--emerald-glow)"></i> الميزات الإسلامية</h3></div>
           <div class="card-body">
-            <div class="toggle-wrap"><div class="toggle-info"><strong>مواقيت الصلاة</strong><span>حسب موقع المستخدم</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>المسبحة الإلكترونية</strong><span>أداة تسبيح تفاعلية</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>الحدث الإسلامي اليومي</strong><span>فائدة أو حدث تاريخي</span></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>عداد المناسبات الإسلامية</strong><span>رمضان، الحج...</span></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>مواقيت الصلاة</strong><span>حسب الموقع</span></div><label class="toggle"><input type="checkbox" id="toggle-prayer" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>المسبحة الإلكترونية</strong></div><label class="toggle"><input type="checkbox" id="toggle-tasbih" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>الحدث الإسلامي اليومي</strong></div><label class="toggle"><input type="checkbox" id="toggle-islamic-event"><span class="toggle-slider"></span></label></div>
           </div>
         </div>
-
         <div class="card">
           <div class="card-header"><h3><i class="fas fa-robot" style="color:var(--info)"></i> ميزات الذكاء الاصطناعي</h3></div>
           <div class="card-body">
-            <div class="toggle-wrap"><div class="toggle-info"><strong>تحويل الصوت إلى نص</strong><span>Groq Whisper API</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>تلخيص الدروس</strong><span>زر تلخيص في كل درس</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>توليد أسئلة المراجعة</strong><span>أسئلة تلقائية من الدرس</span></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><strong>تحويل الدرس إلى مقال</strong><span>تنسيق النص كمقال منظم</span></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>تحويل الصوت إلى نص</strong><span>Whisper API</span></div><label class="toggle"><input type="checkbox" id="toggle-stt" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>تلخيص الدروس</strong></div><label class="toggle"><input type="checkbox" id="toggle-summary" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>توليد أسئلة مراجعة</strong></div><label class="toggle"><input type="checkbox" id="toggle-questions" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>تحويل الدرس لمقال</strong></div><label class="toggle"><input type="checkbox" id="toggle-article"><span class="toggle-slider"></span></label></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3><i class="fas fa-bars" style="color:var(--gold)"></i> الأقسام الرئيسية</h3></div>
+          <div class="card-body">
+            <div class="toggle-wrap"><div class="toggle-info"><strong>التسجيلات الصوتية</strong></div><label class="toggle"><input type="checkbox" id="toggle-audios-section" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>مكتبة الكتب</strong></div><label class="toggle"><input type="checkbox" id="toggle-books-section" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>صفحة الشيوخ</strong></div><label class="toggle"><input type="checkbox" id="toggle-sheikhs-section" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-wrap"><div class="toggle-info"><strong>صفحة من نحن</strong></div><label class="toggle"><input type="checkbox" id="toggle-about-section" checked><span class="toggle-slider"></span></label></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ════════ SETTINGS PAGE ════════ -->
+    <!-- ══ SETTINGS ══ -->
     <div class="page-content" id="page-settings">
       <div class="section-header">
-        <div><h2>إعدادات الموقع</h2><p>تخصيص هوية الموقع بالكامل</p></div>
-        <button class="btn btn-primary" onclick="showToast('تم حفظ الإعدادات بنجاح','success')"><i class="fas fa-save"></i> حفظ التغييرات</button>
+        <div><h2>إعدادات الموقع</h2><p>تخصيص هوية الموقع</p></div>
+        <button class="btn btn-primary" id="save-settings-btn" onclick="saveSettings()"><i class="fas fa-save"></i> حفظ التغييرات</button>
       </div>
-
       <div class="grid-2">
         <div>
           <div class="card" style="margin-bottom:20px">
             <div class="card-header"><h3><i class="fas fa-globe" style="color:var(--emerald-glow)"></i> المعلومات الأساسية</h3></div>
             <div class="card-body">
-              <div class="form-field"><label>اسم الموقع</label><input type="text" value="كفاية المؤمن"></div>
-              <div class="form-field"><label>وصف الموقع</label><textarea>موقع إسلامي يقدم تسجيلات صوتية للدروس والمحاضرات وكتباً إسلامية</textarea></div>
-              <div class="form-field"><label>البريد الإلكتروني للتواصل</label><input type="email" value="info@kifayat.com"></div>
+              <div class="form-field"><label>اسم الموقع</label><input type="text" id="s-site-name" placeholder="كفاية المؤمن"></div>
+              <div class="form-field"><label>وصف الموقع</label><textarea id="s-site-desc" placeholder="وصف مختصر..."></textarea></div>
+              <div class="form-field"><label>البريد الإلكتروني</label><input type="email" id="s-email" placeholder="info@kifayat.com"></div>
             </div>
           </div>
-
           <div class="card">
             <div class="card-header"><h3><i class="fas fa-palette" style="color:var(--gold)"></i> اللون الرئيسي</h3></div>
             <div class="card-body">
               <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px">اختر اللون الأساسي للموقع</p>
-              <div class="color-grid">
-                <div class="color-swatch selected" style="background:#0a6640" title="أخضر زمردي"></div>
-                <div class="color-swatch" style="background:#1a5276" title="أزرق نيلي"></div>
-                <div class="color-swatch" style="background:#6c3483" title="بنفسجي"></div>
-                <div class="color-swatch" style="background:#922b21" title="أحمر داكن"></div>
-                <div class="color-swatch" style="background:#784212" title="بني ذهبي"></div>
-                <div class="color-swatch" style="background:#1a252f" title="رمادي داكن"></div>
+              <div class="color-grid" id="color-swatches">
+                <div class="color-swatch selected" style="background:#0a6640" data-color="#0a6640"></div>
+                <div class="color-swatch" style="background:#1a5276" data-color="#1a5276"></div>
+                <div class="color-swatch" style="background:#6c3483" data-color="#6c3483"></div>
+                <div class="color-swatch" style="background:#922b21" data-color="#922b21"></div>
+                <div class="color-swatch" style="background:#784212" data-color="#784212"></div>
+                <div class="color-swatch" style="background:#1a252f" data-color="#1a252f"></div>
               </div>
+              <input type="hidden" id="s-color" value="#0a6640">
             </div>
           </div>
         </div>
-
         <div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-header"><h3><i class="fas fa-image" style="color:var(--info)"></i> الشعار والأيقونة</h3></div>
-            <div class="card-body">
-              <div class="form-field">
-                <label>شعار الموقع (Logo)</label>
-                <div class="upload-zone">
-                  <i class="fas fa-cloud-upload-alt"></i>
-                  <p>اسحب الصورة هنا أو انقر للرفع</p>
-                  <span>PNG, SVG — حد أقصى 2MB</span>
-                </div>
-              </div>
-              <div class="form-field">
-                <label>أيقونة الموقع (Favicon)</label>
-                <div class="upload-zone" style="padding:20px">
-                  <i class="fas fa-star" style="font-size:24px"></i>
-                  <p>رفع favicon</p>
-                  <span>ICO, PNG — 32×32px</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
             <div class="card-header"><h3><i class="fas fa-share-alt" style="color:var(--success)"></i> روابط التواصل</h3></div>
             <div class="card-body">
-              <div class="form-field"><label><i class="fab fa-whatsapp" style="color:#25d366"></i> واتساب</label><input type="text" placeholder="+966xxxxxxxxx"></div>
-              <div class="form-field"><label><i class="fab fa-telegram" style="color:#0088cc"></i> تيليجرام</label><input type="text" placeholder="@kifayat_almumin"></div>
-              <div class="form-field"><label><i class="fab fa-twitter" style="color:#1da1f2"></i> تويتر/X</label><input type="text" placeholder="@kifayat_almumin"></div>
+              <div class="form-field"><label><i class="fab fa-whatsapp" style="color:#25d366"></i> واتساب</label><input type="text" id="s-whatsapp" placeholder="+966xxxxxxxxx"></div>
+              <div class="form-field"><label><i class="fab fa-telegram" style="color:#0088cc"></i> تيليجرام</label><input type="text" id="s-telegram" placeholder="@kifayat_almumin"></div>
+              <div class="form-field"><label><i class="fab fa-twitter" style="color:#1da1f2"></i> تويتر/X</label><input type="text" id="s-twitter" placeholder="@kifayat_almumin"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-key" style="color:var(--warning)"></i> تغيير كلمة مرور الإدارة</h3></div>
+            <div class="card-body">
+              <div class="form-field"><label>كلمة المرور الجديدة</label><input type="password" id="s-new-pass" placeholder="اتركها فارغة لعدم التغيير"></div>
+              <div class="form-field"><label>تأكيد كلمة المرور</label><input type="password" id="s-confirm-pass" placeholder="أعد الكتابة"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ════════ ABOUT PAGE ════════ -->
+    <!-- ══ ABOUT ══ -->
     <div class="page-content" id="page-about">
       <div class="section-header">
-        <div><h2>صفحة من نحن</h2><p>تعديل محتوى صفحة التعريف</p></div>
-        <button class="btn btn-primary" onclick="showToast('تم حفظ الصفحة بنجاح','success')"><i class="fas fa-save"></i> حفظ</button>
+        <div><h2>صفحة من نحن</h2><p>تعديل محتوى التعريف</p></div>
+        <button class="btn btn-primary" id="save-about-btn" onclick="saveAbout()"><i class="fas fa-save"></i> حفظ</button>
       </div>
       <div class="card">
         <div class="card-body">
-          <div class="form-field"><label>العنوان الرئيسي</label><input type="text" value="عن موقع كفاية المؤمن"></div>
-          <div class="form-field"><label>النص التعريفي</label>
-            <textarea style="min-height:200px">موقع كفاية المؤمن هو منصة إسلامية تعليمية تهدف إلى نشر العلم الشرعي الصحيح وتيسيره للمسلمين في كل مكان.
-
-يقدم الموقع تسجيلات صوتية للدروس والمحاضرات العلمية، ومكتبة متنوعة من الكتب الإسلامية، فضلاً عن بطاقات الأحاديث والأدعية اليومية.
-
-الموقع وقف لصالح مؤسسة البنيان المتين بإشراف الشيخ حسام دياب.</textarea>
-          </div>
+          <div class="form-field"><label>العنوان الرئيسي</label><input type="text" id="about-title" placeholder="عن موقع كفاية المؤمن"></div>
+          <div class="form-field"><label>النص التعريفي</label><textarea style="min-height:200px" id="about-text" placeholder="نص تعريفي مفصل..."></textarea></div>
           <div class="form-row">
-            <div class="form-field"><label>الفوتر — السطر الأول</label><input type="text" value="وقف لصالح مؤسسة البنيان المتين"></div>
-            <div class="form-field"><label>الفوتر — السطر الثاني</label><input type="text" value="بإشراف الشيخ حسام دياب"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════════ ACTIVITY PAGE ════════ -->
-    <div class="page-content" id="page-activity">
-      <div class="section-header">
-        <div><h2>الإشعارات والنشاطات</h2><p>متابعة آخر الأحداث على الموقع</p></div>
-        <button class="btn btn-outline btn-sm"><i class="fas fa-check-double"></i> تحديد الكل كمقروء</button>
-      </div>
-      <div class="card">
-        <div class="card-body" style="padding:8px 22px">
-          <div class="activity-item">
-            <div class="activity-dot" style="background:rgba(45,199,122,0.15);color:var(--success)"><i class="fas fa-upload"></i></div>
-            <div class="activity-content" style="flex:1">
-              <strong>تم رفع درس جديد بنجاح</strong>
-              <span>شرح حديث جبريل — الشيخ حسام دياب • تم تحويل النص تلقائياً بالذكاء الاصطناعي</span>
-            </div>
-            <span style="font-size:11px;color:var(--text-muted);flex-shrink:0">منذ ساعة</span>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot" style="background:rgba(200,168,75,0.15);color:var(--gold)"><i class="fas fa-book"></i></div>
-            <div class="activity-content" style="flex:1">
-              <strong>كتاب جديد أضيف للمكتبة</strong>
-              <span>منهاج القاصدين — ابن قدامة المقدسي</span>
-            </div>
-            <span style="font-size:11px;color:var(--text-muted);flex-shrink:0">منذ 3 ساعات</span>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot" style="background:rgba(42,157,212,0.15);color:var(--info)"><i class="fas fa-robot"></i></div>
-            <div class="activity-content" style="flex:1">
-              <strong>اكتمل تحويل النص بالذكاء الاصطناعي</strong>
-              <span>درس العقيدة — 45 دقيقة — 12,400 كلمة</span>
-            </div>
-            <span style="font-size:11px;color:var(--text-muted);flex-shrink:0">منذ 5 ساعات</span>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot" style="background:rgba(224,82,82,0.15);color:var(--danger)"><i class="fas fa-calendar"></i></div>
-            <div class="activity-content" style="flex:1">
-              <strong>درس مجدول للنشر غداً</strong>
-              <span>فقه العبادات — الطهارة — 10:00 صباحاً</span>
-            </div>
-            <span style="font-size:11px;color:var(--text-muted);flex-shrink:0">منذ 8 ساعات</span>
+            <div class="form-field"><label>الفوتر — السطر الأول</label><input type="text" id="footer-line1" placeholder="وقف لصالح..."></div>
+            <div class="form-field"><label>الفوتر — السطر الثاني</label><input type="text" id="footer-line2" placeholder="بإشراف..."></div>
           </div>
         </div>
       </div>
@@ -1283,137 +817,163 @@ tr:hover td { background: rgba(10,102,64,0.06); }
   </main>
 </div>
 
-<!-- MODALS -->
-<!-- Add Audio Modal -->
-<div class="modal-overlay" id="modal-add-audio">
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- AUDIO MODAL -->
+<div class="modal-overlay" id="modal-audio">
   <div class="modal">
     <div class="modal-header">
-      <h3><i class="fas fa-microphone" style="color:var(--emerald-glow);margin-left:8px"></i> إضافة تسجيل صوتي</h3>
-      <button class="modal-close" onclick="closeModal('modal-add-audio')"><i class="fas fa-times"></i></button>
+      <h3><i class="fas fa-microphone" style="color:var(--emerald-glow);margin-left:8px"></i> <span id="audio-modal-title">إضافة تسجيل صوتي</span></h3>
+      <button class="modal-close" onclick="closeModal('modal-audio')"><i class="fas fa-times"></i></button>
     </div>
+    <input type="hidden" id="audio-id">
     <div class="form-row">
-      <div class="form-field"><label>عنوان الدرس</label><input type="text" placeholder="مثال: شرح الأربعين النووية"></div>
-      <div class="form-field"><label>الشيخ</label>
-        <select><option>الشيخ حسام دياب</option></select>
+      <div class="form-field"><label>عنوان الدرس *</label><input type="text" id="audio-title" placeholder="مثال: شرح الأربعين النووية"></div>
+      <div class="form-field"><label>الشيخ *</label>
+        <select id="audio-sheikh"><option value="">— اختر الشيخ —</option></select>
       </div>
     </div>
     <div class="form-row">
       <div class="form-field"><label>التصنيف</label>
-        <select><option>فقه</option><option>تفسير</option><option>عقيدة</option><option>سيرة</option><option>حديث</option></select>
+        <select id="audio-category"><option value="">— اختر التصنيف —</option></select>
       </div>
-      <div class="form-field"><label>تاريخ النشر</label><input type="date"></div>
+      <div class="form-field"><label>المدة (مثال: 45:23)</label><input type="text" id="audio-duration" placeholder="45:23"></div>
     </div>
-    <div class="form-field"><label>وصف الدرس</label><textarea placeholder="وصف مختصر للدرس..."></textarea></div>
+    <div class="form-field"><label>وصف الدرس</label><textarea id="audio-desc" placeholder="وصف مختصر..."></textarea></div>
     <div class="form-row">
       <div class="form-field">
-        <label>ملف الصوت (MP3)</label>
-        <div class="upload-zone">
-          <i class="fas fa-music"></i>
-          <p>رفع ملف MP3</p>
-          <span>الحد الأقصى 500MB</span>
-        </div>
+        <label>رابط ملف الصوت (MP3) *</label>
+        <input type="url" id="audio-url" placeholder="https://...">
+        <small style="color:var(--text-muted);font-size:11px;margin-top:4px;display:block">ارفع الملف على Supabase Storage أولاً ثم ضع الرابط هنا</small>
       </div>
       <div class="form-field">
-        <label>الصورة المصغرة</label>
-        <div class="upload-zone">
-          <i class="fas fa-image"></i>
-          <p>رفع صورة</p>
-          <span>JPG, PNG — 16:9</span>
-        </div>
+        <label>رابط الصورة المصغرة</label>
+        <input type="url" id="audio-thumb" placeholder="https://...">
       </div>
     </div>
-    <div style="background:rgba(42,157,212,0.08);border:1px solid rgba(42,157,212,0.2);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center">
+    <div style="background:rgba(42,157,212,0.08);border:1px solid rgba(42,157,212,0.2);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center;margin-bottom:16px">
       <i class="fas fa-robot" style="color:var(--info);font-size:18px"></i>
-      <div>
-        <strong style="font-size:13px">تحويل تلقائي بالذكاء الاصطناعي</strong>
-        <p style="font-size:12px;color:var(--text-muted);margin-top:2px">سيتم تحويل الصوت إلى نص تلقائياً بعد الرفع باستخدام Groq Whisper</p>
+      <div style="flex:1">
+        <strong style="font-size:13px">نشر مباشر؟</strong>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:2px">يظهر للزوار فور الحفظ</p>
       </div>
-      <label class="toggle" style="margin-right:auto"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      <label class="toggle"><input type="checkbox" id="audio-published" checked><span class="toggle-slider"></span></label>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-add-audio')">إلغاء</button>
-      <button class="btn btn-primary" onclick="closeModal('modal-add-audio');showToast('تم رفع التسجيل بنجاح وبدأ تحويل النص','success')"><i class="fas fa-upload"></i> رفع الدرس</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-audio')">إلغاء</button>
+      <button class="btn btn-primary" id="save-audio-btn" onclick="saveAudio()"><i class="fas fa-save"></i> حفظ</button>
     </div>
   </div>
 </div>
 
-<!-- Add Book Modal -->
-<div class="modal-overlay" id="modal-add-book">
+<!-- BOOK MODAL -->
+<div class="modal-overlay" id="modal-book">
   <div class="modal">
     <div class="modal-header">
-      <h3><i class="fas fa-book" style="color:var(--gold);margin-left:8px"></i> إضافة كتاب جديد</h3>
-      <button class="modal-close" onclick="closeModal('modal-add-book')"><i class="fas fa-times"></i></button>
+      <h3><i class="fas fa-book" style="color:var(--gold);margin-left:8px"></i> <span id="book-modal-title">إضافة كتاب جديد</span></h3>
+      <button class="modal-close" onclick="closeModal('modal-book')"><i class="fas fa-times"></i></button>
     </div>
+    <input type="hidden" id="book-id">
     <div class="form-row">
-      <div class="form-field"><label>اسم الكتاب</label><input type="text" placeholder="اسم الكتاب"></div>
-      <div class="form-field"><label>المؤلف</label><input type="text" placeholder="اسم المؤلف"></div>
+      <div class="form-field"><label>اسم الكتاب *</label><input type="text" id="book-title" placeholder="اسم الكتاب"></div>
+      <div class="form-field"><label>المؤلف *</label><input type="text" id="book-author" placeholder="اسم المؤلف"></div>
     </div>
-    <div class="form-field"><label>وصف الكتاب</label><textarea placeholder="وصف مختصر..."></textarea></div>
+    <div class="form-field"><label>وصف الكتاب</label><textarea id="book-desc" placeholder="وصف مختصر..."></textarea></div>
     <div class="form-row">
       <div class="form-field">
-        <label>ملف PDF</label>
-        <div class="upload-zone">
-          <i class="fas fa-file-pdf" style="color:#e05252"></i>
-          <p>رفع ملف PDF</p>
-          <span>الحد الأقصى 100MB</span>
-        </div>
+        <label>رابط ملف PDF *</label>
+        <input type="url" id="book-pdf" placeholder="https://...">
       </div>
       <div class="form-field">
-        <label>صورة الغلاف</label>
-        <div class="upload-zone">
-          <i class="fas fa-image"></i>
-          <p>صورة الغلاف</p>
-          <span>JPG, PNG</span>
-        </div>
+        <label>رابط صورة الغلاف</label>
+        <input type="url" id="book-cover" placeholder="https://...">
       </div>
+    </div>
+    <div class="form-field">
+      <label>التقييم (1-5)</label>
+      <input type="number" id="book-rating" min="1" max="5" value="5" placeholder="5">
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border)">
+      <div><strong style="font-size:13px">نشر مباشر؟</strong></div>
+      <label class="toggle"><input type="checkbox" id="book-published" checked><span class="toggle-slider"></span></label>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-add-book')">إلغاء</button>
-      <button class="btn btn-gold" onclick="closeModal('modal-add-book');showToast('تم إضافة الكتاب بنجاح','success')"><i class="fas fa-plus"></i> إضافة الكتاب</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-book')">إلغاء</button>
+      <button class="btn btn-gold" id="save-book-btn" onclick="saveBook()"><i class="fas fa-save"></i> حفظ</button>
     </div>
   </div>
 </div>
 
-<!-- Add Hadith Modal -->
-<div class="modal-overlay" id="modal-add-hadith">
+<!-- HADITH MODAL -->
+<div class="modal-overlay" id="modal-hadith">
   <div class="modal">
     <div class="modal-header">
-      <h3><i class="fas fa-moon" style="color:var(--gold);margin-left:8px"></i> إضافة حديث أو دعاء</h3>
-      <button class="modal-close" onclick="closeModal('modal-add-hadith')"><i class="fas fa-times"></i></button>
+      <h3><i class="fas fa-moon" style="color:var(--gold);margin-left:8px"></i> <span id="hadith-modal-title">إضافة حديث أو دعاء</span></h3>
+      <button class="modal-close" onclick="closeModal('modal-hadith')"><i class="fas fa-times"></i></button>
     </div>
+    <input type="hidden" id="hadith-id">
     <div class="form-row">
       <div class="form-field"><label>النوع</label>
-        <select><option>حديث</option><option>دعاء</option><option>آية قرآنية</option></select>
+        <select id="hadith-type"><option value="hadith">حديث</option><option value="dua">دعاء</option><option value="quran">آية قرآنية</option></select>
       </div>
-      <div class="form-field"><label>المصدر</label><input type="text" placeholder="مثال: رواه البخاري"></div>
+      <div class="form-field"><label>المصدر</label><input type="text" id="hadith-source" placeholder="رواه البخاري"></div>
     </div>
-    <div class="form-field"><label>النص</label><textarea style="min-height:140px;font-family:'Amiri',serif;font-size:17px;line-height:2" placeholder="أدخل نص الحديث أو الدعاء..."></textarea></div>
+    <div class="form-field"><label>النص *</label><textarea style="min-height:140px;font-family:'Amiri',serif;font-size:17px;line-height:2" id="hadith-text" placeholder="أدخل نص الحديث أو الدعاء..."></textarea></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border)">
+      <div><strong style="font-size:13px">تفعيل كحديث اليوم؟</strong><p style="font-size:12px;color:var(--text-muted)">سيظهر في الصفحة الرئيسية</p></div>
+      <label class="toggle"><input type="checkbox" id="hadith-active"><span class="toggle-slider"></span></label>
+    </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-add-hadith')">إلغاء</button>
-      <button class="btn btn-primary" onclick="closeModal('modal-add-hadith');showToast('تم إضافة الحديث بنجاح','success')"><i class="fas fa-save"></i> حفظ</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-hadith')">إلغاء</button>
+      <button class="btn btn-primary" id="save-hadith-btn" onclick="saveHadith()"><i class="fas fa-save"></i> حفظ</button>
     </div>
   </div>
 </div>
 
-<!-- Add Sheikh Modal -->
-<div class="modal-overlay" id="modal-add-sheikh">
+<!-- SHEIKH MODAL -->
+<div class="modal-overlay" id="modal-sheikh">
   <div class="modal">
     <div class="modal-header">
-      <h3><i class="fas fa-user-tie" style="color:var(--emerald-glow);margin-left:8px"></i> إضافة شيخ</h3>
-      <button class="modal-close" onclick="closeModal('modal-add-sheikh')"><i class="fas fa-times"></i></button>
+      <h3><i class="fas fa-user-tie" style="color:var(--emerald-glow);margin-left:8px"></i> <span id="sheikh-modal-title">إضافة شيخ</span></h3>
+      <button class="modal-close" onclick="closeModal('modal-sheikh')"><i class="fas fa-times"></i></button>
     </div>
-    <div class="form-field"><label>الاسم الكامل</label><input type="text" placeholder="اسم الشيخ"></div>
-    <div class="form-field"><label>نبذة مختصرة</label><textarea placeholder="سيرة ذاتية مختصرة..."></textarea></div>
-    <div class="form-field">
-      <label>الصورة الشخصية</label>
-      <div class="upload-zone" style="padding:20px">
-        <i class="fas fa-user-circle" style="font-size:32px"></i>
-        <p>رفع صورة</p>
-      </div>
-    </div>
+    <input type="hidden" id="sheikh-id">
+    <div class="form-field"><label>الاسم الكامل *</label><input type="text" id="sheikh-name" placeholder="الشيخ ..."></div>
+    <div class="form-field"><label>نبذة مختصرة</label><textarea id="sheikh-bio" placeholder="سيرة ذاتية..."></textarea></div>
+    <div class="form-field"><label>رابط الصورة الشخصية</label><input type="url" id="sheikh-image" placeholder="https://..."></div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-add-sheikh')">إلغاء</button>
-      <button class="btn btn-primary" onclick="closeModal('modal-add-sheikh');showToast('تم إضافة الشيخ بنجاح','success')"><i class="fas fa-save"></i> حفظ</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-sheikh')">إلغاء</button>
+      <button class="btn btn-primary" id="save-sheikh-btn" onclick="saveSheikh()"><i class="fas fa-save"></i> حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORY MODAL -->
+<div class="modal-overlay" id="modal-category">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <h3><i class="fas fa-tag" style="color:var(--emerald-glow);margin-left:8px"></i> <span id="cat-modal-title">إضافة تصنيف</span></h3>
+      <button class="modal-close" onclick="closeModal('modal-category')"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="cat-id">
+    <div class="form-field"><label>اسم التصنيف *</label><input type="text" id="cat-name" placeholder="مثال: فقه"></div>
+    <div class="form-field"><label>الأيقونة (إيموجي)</label><input type="text" id="cat-icon" placeholder="🎓" maxlength="4"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-category')">إلغاء</button>
+      <button class="btn btn-primary" id="save-cat-btn" onclick="saveCategory()"><i class="fas fa-save"></i> حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <i class="fas fa-trash-alt"></i>
+    <h3>تأكيد الحذف</h3>
+    <p id="confirm-msg">هل أنت متأكد من حذف هذا العنصر؟ لا يمكن التراجع.</p>
+    <div class="confirm-btns">
+      <button class="btn btn-outline" onclick="closeConfirm()">إلغاء</button>
+      <button class="btn btn-danger" id="confirm-yes-btn"><i class="fas fa-trash"></i> نعم، احذف</button>
     </div>
   </div>
 </div>
@@ -1421,65 +981,952 @@ tr:hover td { background: rgba(10,102,64,0.06); }
 <!-- TOAST -->
 <div class="toast" id="toast">
   <i class="fas fa-check-circle"></i>
-  <span id="toast-msg">تم الحفظ</span>
+  <span id="toast-msg">تم</span>
 </div>
 
 <script>
-// ── LOGIN ──
-function doLogin() {
-  const u = document.getElementById('u').value;
-  const p = document.getElementById('p').value;
-  if (u === 'admin' && p === 'admin123') {
-    document.getElementById('login-screen').style.opacity = '0';
-    document.getElementById('login-screen').style.transition = 'opacity .4s';
-    setTimeout(() => {
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('app').classList.add('visible');
-    }, 400);
-  } else {
-    document.getElementById('u').style.borderColor = 'var(--danger)';
-    document.getElementById('p').style.borderColor = 'var(--danger)';
-    setTimeout(() => {
-      document.getElementById('u').style.borderColor = '';
-      document.getElementById('p').style.borderColor = '';
-    }, 1500);
-  }
+// ════════════════════════════════════════
+//  SUPABASE CONFIG
+// ════════════════════════════════════════
+const SUPABASE_URL = 'https://qfmsplotijbnwderzbkv.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmbXNwbG90aWpibndkZXJ6Ymt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNjQwMzQsImV4cCI6MjA4ODY0MDAzNH0.FgDbDDU7ELt5wd6VihhTECTusHtA7vagr4widsp3XyA';
+
+const HEADERS = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': `Bearer ${SUPABASE_KEY}`,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
+};
+
+// ── Generic DB helpers ──
+async function dbGet(table, params = '') {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, { headers: HEADERS });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
 }
-document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+async function dbInsert(table, data) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+    method: 'POST', headers: HEADERS, body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function dbUpdate(table, id, data) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'PATCH', headers: HEADERS, body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function dbUpsert(table, data, onConflict = 'id') {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?on_conflict=${onConflict}`, {
+    method: 'POST',
+    headers: { ...HEADERS, 'Prefer': 'return=representation,resolution=merge-duplicates' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function dbDelete(table, id) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'DELETE', headers: HEADERS
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return true;
+}
+
+// ════════════════════════════════════════
+//  LOGIN
+// ════════════════════════════════════════
+async function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value.trim();
+  const btn = document.getElementById('login-btn');
+  const errEl = document.getElementById('login-error');
+
+  btn.innerHTML = '<span class="spinner"></span> جارٍ التحقق...';
+  btn.disabled = true;
+  errEl.style.display = 'none';
+
+  try {
+    // Check against settings table (admin credentials stored there)
+    const rows = await dbGet('settings', 'key=in.(admin_user,admin_pass)&select=key,value');
+    const cfg = {};
+    rows.forEach(r => cfg[r.key] = r.value);
+
+    const storedUser = cfg['admin_user'] || 'admin';
+    const storedPass = cfg['admin_pass'] || 'admin123';
+
+    if (u === storedUser && p === storedPass) {
+      sessionStorage.setItem('kifayat_admin', '1');
+      document.getElementById('login-screen').style.opacity = '0';
+      document.getElementById('login-screen').style.transition = 'opacity .4s';
+      setTimeout(() => {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').classList.add('visible');
+        initApp();
+      }, 400);
+    } else {
+      throw new Error('اسم المستخدم أو كلمة المرور غير صحيحة');
+    }
+  } catch (e) {
+    // Fallback: allow default credentials if DB unreachable
+    if (u === 'admin' && p === 'admin123') {
+      sessionStorage.setItem('kifayat_admin', '1');
+      document.getElementById('login-screen').style.opacity = '0';
+      document.getElementById('login-screen').style.transition = 'opacity .4s';
+      setTimeout(() => {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').classList.add('visible');
+        initApp();
+      }, 400);
+    } else {
+      document.getElementById('login-error-msg').textContent = e.message || 'خطأ في الاتصال بقاعدة البيانات';
+      errEl.style.display = 'flex';
+    }
+  }
+
+  btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> دخول';
+  btn.disabled = false;
+}
 
 function doLogout() {
+  sessionStorage.removeItem('kifayat_admin');
   document.getElementById('app').classList.remove('visible');
   document.getElementById('login-screen').style.opacity = '1';
   document.getElementById('login-screen').style.display = 'flex';
 }
 
-// ── NAVIGATION ──
-const pageTitles = {
-  dashboard: ['لوحة الإحصائيات', 'مرحباً بك في لوحة التحكم'],
-  audios: ['التسجيلات الصوتية', 'إدارة الدروس والمحاضرات'],
-  books: ['مكتبة الكتب', 'إدارة الكتب والمراجع الإسلامية'],
-  hadiths: ['الأحاديث والأدعية', 'إدارة البطاقات اليومية'],
-  sheikhs: ['الشيوخ', 'إدارة المحاضرين'],
-  categories: ['التصنيفات', 'تنظيم المحتوى'],
-  visibility: ['إظهار / إخفاء الأقسام', 'تحكم بما يظهر للزوار'],
-  settings: ['إعدادات الموقع', 'تخصيص هوية الموقع'],
-  about: ['صفحة من نحن', 'تعديل محتوى التعريف'],
-  activity: ['الإشعارات', 'آخر النشاطات على الموقع'],
+// ════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════
+const PAGE_TITLES = {
+  dashboard:  ['لوحة الإحصائيات',   'نظرة عامة على الأداء'],
+  audios:     ['التسجيلات الصوتية', 'إدارة الدروس والمحاضرات'],
+  books:      ['مكتبة الكتب',       'إدارة الكتب والمراجع'],
+  hadiths:    ['الأحاديث والأدعية', 'إدارة البطاقات اليومية'],
+  sheikhs:    ['الشيوخ',             'إدارة المحاضرين'],
+  categories: ['التصنيفات',          'تنظيم المحتوى'],
+  visibility: ['إظهار / إخفاء',      'تحكم بما يظهر للزوار'],
+  settings:   ['إعدادات الموقع',     'تخصيص هوية الموقع'],
+  about:      ['صفحة من نحن',        'تعديل محتوى التعريف'],
 };
 
 function showPage(id, el) {
   document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('page-' + id)?.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if (el) el.classList.add('active');
-  if (pageTitles[id]) {
-    document.getElementById('topbar-title').textContent = pageTitles[id][0];
-    document.getElementById('topbar-sub').textContent = pageTitles[id][1];
+  if (PAGE_TITLES[id]) {
+    document.getElementById('topbar-title').textContent = PAGE_TITLES[id][0];
+    document.getElementById('topbar-sub').textContent   = PAGE_TITLES[id][1];
   }
   closeSidebar();
+  loadPageData(id);
 }
 
-// ── SIDEBAR MOBILE ──
+function loadPageData(id) {
+  switch(id) {
+    case 'dashboard':  loadDashboard(); break;
+    case 'audios':     loadAudios();    break;
+    case 'books':      loadBooks();     break;
+    case 'hadiths':    loadHadiths();   break;
+    case 'sheikhs':    loadSheikhs();   break;
+    case 'categories': loadCategories();break;
+    case 'visibility': loadVisibility();break;
+    case 'settings':   loadSettingsPage();  break;
+    case 'about':      loadAbout();     break;
+  }
+}
+
+// ════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════
+async function initApp() {
+  // Pre-load dropdowns
+  await Promise.all([loadSheikhsDropdown(), loadCategoriesDropdown()]);
+  loadDashboard();
+}
+
+// ════════════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════════════
+async function loadDashboard() {
+  try {
+    const [audios, books, analytics] = await Promise.all([
+      dbGet('audios', 'select=id,play_count,title&is_published=eq.true&order=play_count.desc&limit=5'),
+      dbGet('books',  'select=id,download_count,title'),
+      dbGet('analytics', 'select=event')
+    ]);
+
+    // Stats
+    const totalListens   = audios.reduce((s,a) => s + (a.play_count||0), 0);
+    const totalDownloads = books.reduce((s,b)  => s + (b.download_count||0), 0);
+    const totalVisits    = analytics.filter(a => a.event === 'visit').length;
+    document.getElementById('stat-listens').textContent   = totalListens.toLocaleString('ar');
+    document.getElementById('stat-downloads').textContent = totalDownloads.toLocaleString('ar');
+    document.getElementById('stat-visits').textContent    = totalVisits.toLocaleString('ar');
+    document.getElementById('stat-audios').textContent    = audios.length;
+
+    // Top audios chart
+    const max = audios[0]?.play_count || 1;
+    document.getElementById('top-audios-chart').innerHTML = audios.length
+      ? audios.map(a => `
+          <div class="chart-bar-item">
+            <div class="chart-bar-label"><span>${a.title?.substring(0,30)}...</span><span>${a.play_count||0}</span></div>
+            <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${((a.play_count||0)/max*100)}%;background:var(--emerald-glow)"></div></div>
+          </div>`)
+        .join('')
+      : '<div class="empty-state"><i class="fas fa-chart-bar"></i><p>لا توجد بيانات بعد</p></div>';
+
+    // Recent activity
+    const recentAnalytics = await dbGet('analytics', 'select=event,item_type,created_at&order=created_at.desc&limit=5');
+    const icons = { play:'fas fa-play', download:'fas fa-download', view:'fas fa-eye', visit:'fas fa-home' };
+    const colors = { play:'rgba(45,199,122,0.15)', download:'rgba(200,168,75,0.15)', view:'rgba(42,157,212,0.15)', visit:'rgba(10,102,64,0.15)' };
+    document.getElementById('recent-activity').innerHTML = recentAnalytics.length
+      ? recentAnalytics.map(a => `
+          <div class="activity-item">
+            <div class="activity-dot" style="background:${colors[a.event]||'rgba(255,255,255,0.05)'}">
+              <i class="${icons[a.event]||'fas fa-circle'}" style="color:var(--success)"></i>
+            </div>
+            <div class="activity-content">
+              <strong>${a.event === 'play' ? 'استماع' : a.event === 'download' ? 'تحميل' : a.event === 'view' ? 'مشاهدة' : 'زيارة'}</strong>
+              <span>${a.item_type||''} • ${timeAgo(a.created_at)}</span>
+            </div>
+          </div>`)
+        .join('')
+      : '<div class="empty-state"><i class="fas fa-clock"></i><p>لا توجد نشاطات بعد</p></div>';
+
+  } catch(e) {
+    console.error('Dashboard error:', e);
+    showToast('خطأ في تحميل الإحصائيات', 'error');
+  }
+}
+
+// ════════════════════════════════════════
+//  AUDIOS
+// ════════════════════════════════════════
+async function loadAudios() {
+  const tbody = document.getElementById('audios-tbody');
+  tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div></td></tr>`;
+  try {
+    const data = await dbGet('audios', 'select=id,title,duration,play_count,is_published,audio_url,description,thumbnail_url,sheikhs(id,name),categories(id,name)&order=created_at.desc');
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class="fas fa-microphone-slash"></i><p>لا توجد تسجيلات بعد</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(a => `
+      <tr>
+        <td><div class="thumb">🎙</div></td>
+        <td>
+          <div class="td-title">${esc(a.title)}</div>
+          <div class="td-sub">${a.play_count||0} استماع</div>
+        </td>
+        <td>${esc(a.sheikhs?.name||'—')}</td>
+        <td>${esc(a.duration||'—')}</td>
+        <td><span class="badge badge-blue">${esc(a.categories?.name||'—')}</span></td>
+        <td>${a.play_count||0}</td>
+        <td><span class="badge ${a.is_published?'badge-green':'badge-muted'}">${a.is_published?'منشور':'مسودة'}</span></td>
+        <td>
+          <div class="action-btns">
+            <button class="btn btn-outline btn-sm" onclick="editAudio('${a.id}')"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="confirmDelete('audios','${a.id}','التسجيل: ${esc(a.title)}')"><i class="fas fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i><p>خطأ في التحميل: ${e.message}</p></div></td></tr>`;
+  }
+}
+
+async function saveAudio() {
+  const btn = document.getElementById('save-audio-btn');
+  const id = document.getElementById('audio-id').value;
+  const title = document.getElementById('audio-title').value.trim();
+  const audioUrl = document.getElementById('audio-url').value.trim();
+
+  if (!title) { showToast('العنوان مطلوب', 'error'); return; }
+  if (!audioUrl) { showToast('رابط الصوت مطلوب', 'error'); return; }
+
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
+  btn.disabled = true;
+
+  const payload = {
+    title,
+    audio_url:     audioUrl,
+    thumbnail_url: document.getElementById('audio-thumb').value.trim() || null,
+    duration:      document.getElementById('audio-duration').value.trim() || null,
+    description:   document.getElementById('audio-desc').value.trim() || null,
+    is_published:  document.getElementById('audio-published').checked,
+    sheikh_id:     document.getElementById('audio-sheikh').value || null,
+    category_id:   document.getElementById('audio-category').value || null,
+  };
+
+  try {
+    if (id) {
+      await dbUpdate('audios', id, payload);
+      showToast('تم تحديث التسجيل بنجاح ✅', 'success');
+    } else {
+      payload.play_count = 0;
+      await dbInsert('audios', payload);
+      showToast('تم إضافة التسجيل بنجاح ✅', 'success');
+    }
+    closeModal('modal-audio');
+    loadAudios();
+  } catch(e) {
+    showToast('خطأ: ' + e.message, 'error');
+  }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+  btn.disabled = false;
+}
+
+async function editAudio(id) {
+  try {
+    const data = await dbGet('audios', `id=eq.${id}&select=*&limit=1`);
+    const a = data[0];
+    document.getElementById('audio-id').value       = a.id;
+    document.getElementById('audio-title').value    = a.title || '';
+    document.getElementById('audio-url').value      = a.audio_url || '';
+    document.getElementById('audio-thumb').value    = a.thumbnail_url || '';
+    document.getElementById('audio-duration').value = a.duration || '';
+    document.getElementById('audio-desc').value     = a.description || '';
+    document.getElementById('audio-published').checked = a.is_published;
+    document.getElementById('audio-sheikh').value   = a.sheikh_id || '';
+    document.getElementById('audio-category').value = a.category_id || '';
+    document.getElementById('audio-modal-title').textContent = 'تعديل التسجيل';
+    openModal('modal-audio');
+  } catch(e) { showToast('خطأ في التحميل', 'error'); }
+}
+
+// ════════════════════════════════════════
+//  BOOKS
+// ════════════════════════════════════════
+const BOOK_COLORS = [
+  'linear-gradient(135deg,#0a2e1c,#031e12)',
+  'linear-gradient(135deg,#1a3a10,#0a2008)',
+  'linear-gradient(135deg,#2a1810,#150c08)',
+  'linear-gradient(135deg,#0a1a3a,#060f20)',
+  'linear-gradient(135deg,#1a0a2a,#0d0615)',
+];
+const BOOK_ICONS = ['📕','📗','📙','📘','📓'];
+
+async function loadBooks() {
+  const grid = document.getElementById('books-grid');
+  grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div>`;
+  try {
+    const data = await dbGet('books', 'select=*&order=created_at.desc');
+    if (!data.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-book-open"></i><p>لا توجد كتب بعد</p></div>`;
+      return;
+    }
+    grid.innerHTML = data.map((b, i) => `
+      <div class="book-card">
+        <div class="book-cover" style="${b.cover_url ? `background:url(${b.cover_url}) center/cover` : BOOK_COLORS[i % BOOK_COLORS.length]}">
+          ${b.cover_url ? '' : BOOK_ICONS[i % BOOK_ICONS.length]}
+        </div>
+        <div class="book-info">
+          <strong>${esc(b.title)}</strong>
+          <span>${esc(b.author||'')}</span>
+          <div style="margin-top:4px">
+            <span class="badge ${b.is_published?'badge-green':'badge-muted'}" style="font-size:10px">${b.is_published?'منشور':'مسودة'}</span>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:6px">
+            <button class="btn btn-outline btn-sm" style="flex:1;font-size:11px" onclick="editBook('${b.id}')"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" style="flex:1;font-size:11px" onclick="confirmDelete('books','${b.id}','الكتاب: ${esc(b.title)}')"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    `).join('') + `
+      <div class="book-card" style="border:2px dashed var(--border);background:transparent;display:flex;align-items:center;justify-content:center;min-height:220px;cursor:pointer" onclick="openModal('modal-book')">
+        <div style="text-align:center;color:var(--text-muted)">
+          <i class="fas fa-plus" style="font-size:28px;margin-bottom:8px;display:block"></i>
+          <span style="font-size:13px">إضافة كتاب</span>
+        </div>
+      </div>`;
+  } catch(e) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i><p>خطأ: ${e.message}</p></div>`;
+  }
+}
+
+async function saveBook() {
+  const btn = document.getElementById('save-book-btn');
+  const id = document.getElementById('book-id').value;
+  const title = document.getElementById('book-title').value.trim();
+  const author = document.getElementById('book-author').value.trim();
+  const pdfUrl = document.getElementById('book-pdf').value.trim();
+
+  if (!title) { showToast('اسم الكتاب مطلوب', 'error'); return; }
+  if (!author) { showToast('اسم المؤلف مطلوب', 'error'); return; }
+  if (!pdfUrl) { showToast('رابط PDF مطلوب', 'error'); return; }
+
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
+  btn.disabled = true;
+
+  const payload = {
+    title,
+    author,
+    pdf_url:         pdfUrl,
+    cover_url:       document.getElementById('book-cover').value.trim() || null,
+    description:     document.getElementById('book-desc').value.trim() || null,
+    rating:          parseInt(document.getElementById('book-rating').value) || 5,
+    is_published:    document.getElementById('book-published').checked,
+  };
+
+  try {
+    if (id) {
+      await dbUpdate('books', id, payload);
+      showToast('تم تحديث الكتاب بنجاح ✅', 'success');
+    } else {
+      payload.download_count = 0;
+      await dbInsert('books', payload);
+      showToast('تم إضافة الكتاب بنجاح ✅', 'success');
+    }
+    closeModal('modal-book');
+    loadBooks();
+  } catch(e) {
+    showToast('خطأ: ' + e.message, 'error');
+  }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+  btn.disabled = false;
+}
+
+async function editBook(id) {
+  try {
+    const data = await dbGet('books', `id=eq.${id}&select=*&limit=1`);
+    const b = data[0];
+    document.getElementById('book-id').value      = b.id;
+    document.getElementById('book-title').value   = b.title || '';
+    document.getElementById('book-author').value  = b.author || '';
+    document.getElementById('book-pdf').value     = b.pdf_url || '';
+    document.getElementById('book-cover').value   = b.cover_url || '';
+    document.getElementById('book-desc').value    = b.description || '';
+    document.getElementById('book-rating').value  = b.rating || 5;
+    document.getElementById('book-published').checked = b.is_published;
+    document.getElementById('book-modal-title').textContent = 'تعديل الكتاب';
+    openModal('modal-book');
+  } catch(e) { showToast('خطأ في التحميل', 'error'); }
+}
+
+// ════════════════════════════════════════
+//  HADITHS
+// ════════════════════════════════════════
+async function loadHadiths() {
+  const tbody = document.getElementById('hadiths-tbody');
+  tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div></td></tr>`;
+  try {
+    const data = await dbGet('hadiths', 'select=*&order=created_at.desc');
+
+    // Show active hadith
+    const active = data.find(h => h.is_active);
+    if (active) {
+      document.getElementById('active-hadith-text').textContent   = `«${active.text}»`;
+      document.getElementById('active-hadith-source').textContent = active.source || '';
+    }
+
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fas fa-moon"></i><p>لا توجد أحاديث بعد</p></div></td></tr>`;
+      return;
+    }
+
+    const typeLabels = { hadith: ['badge-blue','حديث'], dua: ['badge-gold','دعاء'], quran: ['badge-green','قرآن'] };
+    tbody.innerHTML = data.map(h => {
+      const [cls, lbl] = typeLabels[h.type] || ['badge-muted', h.type];
+      return `
+        <tr>
+          <td style="max-width:300px"><div class="td-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc((h.text||'').substring(0,60))}...</div></td>
+          <td>${esc(h.source||'—')}</td>
+          <td><span class="badge ${cls}">${lbl}</span></td>
+          <td>
+            <span class="badge ${h.is_active?'badge-green':'badge-muted'}">${h.is_active?'نشط':'غير نشط'}</span>
+            ${!h.is_active ? `<button class="btn btn-outline btn-sm" style="margin-right:6px;font-size:11px" onclick="setActiveHadith('${h.id}')">تفعيل</button>` : ''}
+          </td>
+          <td>
+            <div class="action-btns">
+              <button class="btn btn-outline btn-sm" onclick="editHadith('${h.id}')"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="confirmDelete('hadiths','${h.id}','الحديث')"><i class="fas fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>`;
+    }).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i><p>خطأ: ${e.message}</p></div></td></tr>`;
+  }
+}
+
+async function saveHadith() {
+  const btn = document.getElementById('save-hadith-btn');
+  const id = document.getElementById('hadith-id').value;
+  const text = document.getElementById('hadith-text').value.trim();
+
+  if (!text) { showToast('النص مطلوب', 'error'); return; }
+
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
+  btn.disabled = true;
+
+  const isActive = document.getElementById('hadith-active').checked;
+
+  const payload = {
+    text,
+    source:    document.getElementById('hadith-source').value.trim() || null,
+    type:      document.getElementById('hadith-type').value,
+    is_active: isActive,
+  };
+
+  try {
+    // If setting as active, deactivate all others first
+    if (isActive) {
+      const existing = await dbGet('hadiths', 'is_active=eq.true&select=id');
+      for (const h of existing) {
+        if (h.id !== id) await dbUpdate('hadiths', h.id, { is_active: false });
+      }
+    }
+    if (id) {
+      await dbUpdate('hadiths', id, payload);
+      showToast('تم تحديث الحديث بنجاح ✅', 'success');
+    } else {
+      await dbInsert('hadiths', payload);
+      showToast('تم إضافة الحديث بنجاح ✅', 'success');
+    }
+    closeModal('modal-hadith');
+    loadHadiths();
+  } catch(e) {
+    showToast('خطأ: ' + e.message, 'error');
+  }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+  btn.disabled = false;
+}
+
+async function setActiveHadith(id) {
+  try {
+    const all = await dbGet('hadiths', 'is_active=eq.true&select=id');
+    for (const h of all) await dbUpdate('hadiths', h.id, { is_active: false });
+    await dbUpdate('hadiths', id, { is_active: true });
+    showToast('تم تفعيل الحديث ✅', 'success');
+    loadHadiths();
+  } catch(e) { showToast('خطأ: ' + e.message, 'error'); }
+}
+
+async function editHadith(id) {
+  try {
+    const data = await dbGet('hadiths', `id=eq.${id}&select=*&limit=1`);
+    const h = data[0];
+    document.getElementById('hadith-id').value      = h.id;
+    document.getElementById('hadith-text').value    = h.text || '';
+    document.getElementById('hadith-source').value  = h.source || '';
+    document.getElementById('hadith-type').value    = h.type || 'hadith';
+    document.getElementById('hadith-active').checked = h.is_active;
+    document.getElementById('hadith-modal-title').textContent = 'تعديل الحديث';
+    openModal('modal-hadith');
+  } catch(e) { showToast('خطأ في التحميل', 'error'); }
+}
+
+// ════════════════════════════════════════
+//  SHEIKHS
+// ════════════════════════════════════════
+async function loadSheikhs() {
+  const grid = document.getElementById('sheikhs-grid');
+  grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div>`;
+  try {
+    const data = await dbGet('sheikhs', 'select=*&order=created_at.desc');
+    if (!data.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-user-slash"></i><p>لا يوجد شيوخ بعد</p></div>`;
+      return;
+    }
+    grid.innerHTML = data.map(s => `
+      <div class="sheikh-card">
+        <div class="sheikh-avatar">
+          ${s.image_url
+            ? `<img src="${s.image_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
+            : esc((s.name||'?').charAt(s.name.indexOf(' ')+1) || s.name.charAt(0))}
+        </div>
+        <strong>${esc(s.name)}</strong>
+        <span>${esc((s.bio||'').substring(0,40))}${(s.bio||'').length>40?'...':''}</span>
+        <div style="margin-top:12px;display:flex;gap:6px;justify-content:center">
+          <button class="btn btn-outline btn-sm" onclick="editSheikh('${s.id}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete('sheikhs','${s.id}','الشيخ: ${esc(s.name)}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `).join('') + `
+      <div class="sheikh-card" style="border:2px dashed var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;min-height:180px" onclick="openModal('modal-sheikh')">
+        <div style="text-align:center;color:var(--text-muted)">
+          <i class="fas fa-plus" style="font-size:24px;margin-bottom:8px;display:block"></i>
+          <span style="font-size:13px">إضافة شيخ</span>
+        </div>
+      </div>`;
+  } catch(e) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i><p>خطأ: ${e.message}</p></div>`;
+  }
+}
+
+async function saveSheikh() {
+  const btn = document.getElementById('save-sheikh-btn');
+  const id = document.getElementById('sheikh-id').value;
+  const name = document.getElementById('sheikh-name').value.trim();
+  if (!name) { showToast('الاسم مطلوب', 'error'); return; }
+
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
+  btn.disabled = true;
+
+  const payload = {
+    name,
+    bio:       document.getElementById('sheikh-bio').value.trim() || null,
+    image_url: document.getElementById('sheikh-image').value.trim() || null,
+  };
+
+  try {
+    if (id) {
+      await dbUpdate('sheikhs', id, payload);
+      showToast('تم تحديث الشيخ بنجاح ✅', 'success');
+    } else {
+      await dbInsert('sheikhs', payload);
+      showToast('تم إضافة الشيخ بنجاح ✅', 'success');
+    }
+    closeModal('modal-sheikh');
+    loadSheikhs();
+    loadSheikhsDropdown();
+  } catch(e) {
+    showToast('خطأ: ' + e.message, 'error');
+  }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+  btn.disabled = false;
+}
+
+async function editSheikh(id) {
+  try {
+    const data = await dbGet('sheikhs', `id=eq.${id}&select=*&limit=1`);
+    const s = data[0];
+    document.getElementById('sheikh-id').value    = s.id;
+    document.getElementById('sheikh-name').value  = s.name || '';
+    document.getElementById('sheikh-bio').value   = s.bio || '';
+    document.getElementById('sheikh-image').value = s.image_url || '';
+    document.getElementById('sheikh-modal-title').textContent = 'تعديل الشيخ';
+    openModal('modal-sheikh');
+  } catch(e) { showToast('خطأ في التحميل', 'error'); }
+}
+
+async function loadSheikhsDropdown() {
+  try {
+    const data = await dbGet('sheikhs', 'select=id,name&order=name');
+    const sel = document.getElementById('audio-sheikh');
+    const current = sel.value;
+    sel.innerHTML = '<option value="">— اختر الشيخ —</option>' +
+      data.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+    if (current) sel.value = current;
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════
+//  CATEGORIES
+// ════════════════════════════════════════
+async function loadCategories() {
+  const list = document.getElementById('categories-list');
+  list.innerHTML = `<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div>`;
+  try {
+    const data = await dbGet('categories', 'select=*&order=name');
+    if (!data.length) {
+      list.innerHTML = `<div class="empty-state"><i class="fas fa-tags"></i><p>لا توجد تصنيفات بعد</p></div>`;
+      return;
+    }
+    list.innerHTML = data.map(c => `
+      <div class="toggle-wrap" style="border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:8px">
+        <div class="toggle-info">
+          <strong>${c.icon||'🏷'} ${esc(c.name)}</strong>
+        </div>
+        <div class="action-btns">
+          <button class="btn btn-outline btn-sm" onclick="editCategory('${c.id}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete('categories','${c.id}','التصنيف: ${esc(c.name)}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    list.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i><p>خطأ: ${e.message}</p></div>`;
+  }
+}
+
+async function saveCategory() {
+  const btn = document.getElementById('save-cat-btn');
+  const id = document.getElementById('cat-id').value;
+  const name = document.getElementById('cat-name').value.trim();
+  if (!name) { showToast('الاسم مطلوب', 'error'); return; }
+
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
+  btn.disabled = true;
+
+  const payload = {
+    name,
+    icon: document.getElementById('cat-icon').value.trim() || '🏷',
+  };
+
+  try {
+    if (id) {
+      await dbUpdate('categories', id, payload);
+      showToast('تم تحديث التصنيف ✅', 'success');
+    } else {
+      await dbInsert('categories', payload);
+      showToast('تم إضافة التصنيف ✅', 'success');
+    }
+    closeModal('modal-category');
+    loadCategories();
+    loadCategoriesDropdown();
+  } catch(e) {
+    showToast('خطأ: ' + e.message, 'error');
+  }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+  btn.disabled = false;
+}
+
+async function editCategory(id) {
+  try {
+    const data = await dbGet('categories', `id=eq.${id}&select=*&limit=1`);
+    const c = data[0];
+    document.getElementById('cat-id').value   = c.id;
+    document.getElementById('cat-name').value = c.name || '';
+    document.getElementById('cat-icon').value = c.icon || '';
+    document.getElementById('cat-modal-title').textContent = 'تعديل التصنيف';
+    openModal('modal-category');
+  } catch(e) { showToast('خطأ في التحميل', 'error'); }
+}
+
+async function loadCategoriesDropdown() {
+  try {
+    const data = await dbGet('categories', 'select=id,name&order=name');
+    const sel = document.getElementById('audio-category');
+    const current = sel.value;
+    sel.innerHTML = '<option value="">— اختر التصنيف —</option>' +
+      data.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    if (current) sel.value = current;
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════
+//  SETTINGS
+// ════════════════════════════════════════
+
+// Visibility settings
+const VISIBILITY_KEYS = [
+  'toggle-hadith-card','toggle-latest-audios','toggle-latest-books','toggle-top-audios',
+  'toggle-prayer','toggle-tasbih','toggle-islamic-event',
+  'toggle-stt','toggle-summary','toggle-questions','toggle-article',
+  'toggle-audios-section','toggle-books-section','toggle-sheikhs-section','toggle-about-section'
+];
+
+async function loadVisibility() {
+  try {
+    const keyList = VISIBILITY_KEYS.join(',');
+    const data = await dbGet('settings', `key=in.(${keyList})&select=key,value`);
+    const cfg = {};
+    data.forEach(r => cfg[r.key] = r.value);
+    VISIBILITY_KEYS.forEach(k => {
+      const el = document.getElementById(k);
+      if (el && cfg[k] !== undefined) el.checked = cfg[k] === 'true';
+    });
+  } catch(e) { /* use defaults */ }
+}
+
+async function saveVisibilitySettings() {
+  const btn = document.getElementById('save-visibility-btn');
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
+  btn.disabled = true;
+
+  try {
+    const rows = VISIBILITY_KEYS.map(k => ({
+      key: k,
+      value: document.getElementById(k)?.checked ? 'true' : 'false'
+    }));
+    await dbUpsert('settings', rows, 'key');
+    showToast('تم حفظ إعدادات الظهور ✅', 'success');
+  } catch(e) {
+    showToast('خطأ: ' + e.message, 'error');
+  }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+  btn.disabled = false;
+}
+
+// Main settings
+async function loadSettingsPage() {
+  try {
+    const data = await dbGet('settings', 'key=in.(site_name,site_desc,email,primary_color,whatsapp,telegram,twitter)&select=key,value');
+    const cfg = {};
+    data.forEach(r => cfg[r.key] = r.value);
+
+    if (cfg.site_name)    document.getElementById('s-site-name').value = cfg.site_name;
+    if (cfg.site_desc)    document.getElementById('s-site-desc').value = cfg.site_desc;
+    if (cfg.email)        document.getElementById('s-email').value     = cfg.email;
+    if (cfg.whatsapp)     document.getElementById('s-whatsapp').value  = cfg.whatsapp;
+    if (cfg.telegram)     document.getElementById('s-telegram').value  = cfg.telegram;
+    if (cfg.twitter)      document.getElementById('s-twitter').value   = cfg.twitter;
+    if (cfg.primary_color) {
+      document.getElementById('s-color').value = cfg.primary_color;
+      document.querySelectorAll('.color-swatch').forEach(s => {
+        s.classList.toggle('selected', s.dataset.color === cfg.primary_color);
+      });
+    }
+  } catch(e) {}
+}
+
+async function saveSettings() {
+  const btn = document.getElementById('save-settings-btn');
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
+  btn.disabled = true;
+
+  try {
+    const newPass    = document.getElementById('s-new-pass').value.trim();
+    const confirmPass = document.getElementById('s-confirm-pass').value.trim();
+    if (newPass && newPass !== confirmPass) {
+      showToast('كلمتا المرور غير متطابقتان', 'error');
+      btn.innerHTML = '<i class="fas fa-save"></i> حفظ التغييرات';
+      btn.disabled = false;
+      return;
+    }
+
+    const rows = [
+      { key: 'site_name',     value: document.getElementById('s-site-name').value.trim() },
+      { key: 'site_desc',     value: document.getElementById('s-site-desc').value.trim() },
+      { key: 'email',         value: document.getElementById('s-email').value.trim() },
+      { key: 'primary_color', value: document.getElementById('s-color').value },
+      { key: 'whatsapp',      value: document.getElementById('s-whatsapp').value.trim() },
+      { key: 'telegram',      value: document.getElementById('s-telegram').value.trim() },
+      { key: 'twitter',       value: document.getElementById('s-twitter').value.trim() },
+    ].filter(r => r.value);
+
+    if (newPass) rows.push({ key: 'admin_pass', value: newPass });
+
+    await dbUpsert('settings', rows, 'key');
+    showToast('تم حفظ الإعدادات بنجاح ✅', 'success');
+    document.getElementById('s-new-pass').value     = '';
+    document.getElementById('s-confirm-pass').value = '';
+  } catch(e) {
+    showToast('خطأ: ' + e.message, 'error');
+  }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> حفظ التغييرات';
+  btn.disabled = false;
+}
+
+// About page
+async function loadAbout() {
+  try {
+    const data = await dbGet('settings', 'key=in.(about_title,about_text,footer_line1,footer_line2)&select=key,value');
+    const cfg = {};
+    data.forEach(r => cfg[r.key] = r.value);
+    if (cfg.about_title) document.getElementById('about-title').value  = cfg.about_title;
+    if (cfg.about_text)  document.getElementById('about-text').value   = cfg.about_text;
+    if (cfg.footer_line1) document.getElementById('footer-line1').value = cfg.footer_line1;
+    if (cfg.footer_line2) document.getElementById('footer-line2').value = cfg.footer_line2;
+  } catch(e) {}
+}
+
+async function saveAbout() {
+  const btn = document.getElementById('save-about-btn');
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
+  btn.disabled = true;
+
+  try {
+    const rows = [
+      { key: 'about_title',  value: document.getElementById('about-title').value.trim() },
+      { key: 'about_text',   value: document.getElementById('about-text').value.trim() },
+      { key: 'footer_line1', value: document.getElementById('footer-line1').value.trim() },
+      { key: 'footer_line2', value: document.getElementById('footer-line2').value.trim() },
+    ].filter(r => r.value);
+    await dbUpsert('settings', rows, 'key');
+    showToast('تم حفظ الصفحة بنجاح ✅', 'success');
+  } catch(e) {
+    showToast('خطأ: ' + e.message, 'error');
+  }
+
+  btn.innerHTML = '<i class="fas fa-save"></i> حفظ';
+  btn.disabled = false;
+}
+
+// ════════════════════════════════════════
+//  DELETE
+// ════════════════════════════════════════
+let _deleteTable = null, _deleteId = null;
+
+function confirmDelete(table, id, label) {
+  _deleteTable = table;
+  _deleteId    = id;
+  document.getElementById('confirm-msg').textContent = `هل أنت متأكد من حذف: "${label}"؟ لا يمكن التراجع.`;
+  document.getElementById('confirm-overlay').classList.add('open');
+  document.getElementById('confirm-yes-btn').onclick = async () => {
+    await doDelete();
+  };
+}
+
+async function doDelete() {
+  const btn = document.getElementById('confirm-yes-btn');
+  btn.innerHTML = '<span class="spinner"></span> جارٍ الحذف...';
+  btn.disabled = true;
+  try {
+    await dbDelete(_deleteTable, _deleteId);
+    showToast('تم الحذف بنجاح ✅', 'success');
+    closeConfirm();
+    // Reload current page
+    const active = document.querySelector('.nav-item.active');
+    const page = document.querySelector('.page-content.active');
+    if (page) loadPageData(page.id.replace('page-',''));
+  } catch(e) {
+    showToast('خطأ في الحذف: ' + e.message, 'error');
+  }
+  btn.innerHTML = '<i class="fas fa-trash"></i> نعم، احذف';
+  btn.disabled = false;
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  _deleteTable = null;
+  _deleteId = null;
+}
+
+// ════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════
+function openModal(id) {
+  // Reset form if adding new
+  const modal = document.getElementById(id);
+  document.getElementById(id).classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  // Reset hidden IDs and titles
+  const idInputs = { 'modal-audio':'audio-id', 'modal-book':'book-id', 'modal-hadith':'hadith-id', 'modal-sheikh':'sheikh-id', 'modal-category':'cat-id' };
+  const titleEls = { 'modal-audio':'audio-modal-title', 'modal-book':'book-modal-title', 'modal-hadith':'hadith-modal-title', 'modal-sheikh':'sheikh-modal-title', 'modal-category':'cat-modal-title' };
+  const defaults = { 'modal-audio':'إضافة تسجيل صوتي', 'modal-book':'إضافة كتاب جديد', 'modal-hadith':'إضافة حديث أو دعاء', 'modal-sheikh':'إضافة شيخ', 'modal-category':'إضافة تصنيف' };
+  if (idInputs[id]) document.getElementById(idInputs[id]).value = '';
+  if (titleEls[id] && defaults[id]) document.getElementById(titleEls[id]).textContent = defaults[id];
+}
+
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+});
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  t.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function filterTable(tbodyId, inputId) {
+  const q = document.getElementById(inputId).value.toLowerCase();
+  document.querySelectorAll(`#${tbodyId} tr`).forEach(tr => {
+    tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('open');
@@ -1489,37 +1936,39 @@ function closeSidebar() {
   document.getElementById('overlay').classList.remove('open');
 }
 
-// ── MODAL ──
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
-});
-
-// ── TOAST ──
-function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  document.getElementById('toast-msg').textContent = msg;
-  t.className = 'toast ' + type + ' show';
-  t.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ── COLOR SWATCHES ──
 document.querySelectorAll('.color-swatch').forEach(s => {
   s.addEventListener('click', () => {
     document.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('selected'));
     s.classList.add('selected');
+    document.getElementById('s-color').value = s.dataset.color;
   });
 });
 
-// ── ANIMATE BARS ──
-setTimeout(() => {
-  document.querySelectorAll('.chart-bar-fill').forEach(b => {
-    const w = b.style.width; b.style.width = '0';
-    setTimeout(() => b.style.width = w, 100);
-  });
-}, 500);
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
+  if (diff < 60)   return 'منذ لحظات';
+  if (diff < 3600) return `منذ ${Math.floor(diff/60)} دقيقة`;
+  if (diff < 86400) return `منذ ${Math.floor(diff/3600)} ساعة`;
+  return `منذ ${Math.floor(diff/86400)} يوم`;
+}
+
+// Enter key on login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+});
+
+// Auto-login if session exists
+if (sessionStorage.getItem('kifayat_admin') === '1') {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  initApp();
+}
 </script>
 </body>
 </html>
