@@ -920,42 +920,70 @@ footer{
 
 /* BIG PLAYER */
 .big-player{
-  max-width:1000px;margin:0 auto;
-  padding:32px 24px;
+  background:var(--card);
+  margin:20px 24px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  padding:28px 32px;
+  box-shadow:var(--shadow);
 }
-.big-progress{
-  height:8px;background:var(--bg3);
-  border-radius:4px;cursor:pointer;margin:16px 0;
-  position:relative;
+.bp-track{
+  display:flex;align-items:center;gap:16px;margin-bottom:20px;
 }
-.big-progress-fill{
-  height:100%;border-radius:4px;width:35%;
-  background:linear-gradient(90deg,var(--em2),var(--em3));
-  position:relative;transition:width .5s linear;
-}
-.big-progress-fill::after{
-  content:'';position:absolute;
-  top:50%;right:-7px;transform:translateY(-50%);
-  width:14px;height:14px;border-radius:50%;
-  background:var(--em2);
-  box-shadow:0 0 12px rgba(11,107,66,0.6);
-}
-.big-player-btns{
-  display:flex;align-items:center;justify-content:center;gap:16px;
-}
-.big-player-btn{
-  background:none;border:none;
-  color:var(--text2);font-size:20px;cursor:pointer;
-  transition:color .2s;padding:8px;
-}
-.big-player-btn:hover{color:var(--em)}
-.big-player-main{
-  width:60px;height:60px;border-radius:50%;
+.bp-thumb{
+  width:56px;height:56px;border-radius:14px;flex-shrink:0;
   background:linear-gradient(135deg,var(--em2),var(--em-dark));
-  color:white;font-size:22px;
-  box-shadow:0 8px 25px rgba(11,107,66,0.45);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;box-shadow:0 6px 20px rgba(11,107,66,0.3);
 }
-.big-player-main:hover{transform:scale(1.05);background:linear-gradient(135deg,var(--em3),var(--em2))}
+.bp-info{flex:1;min-width:0}
+.bp-title{font-size:15px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bp-sheikh{font-size:12px;color:var(--text3)}
+.bp-progress-wrap{margin-bottom:6px}
+.bp-bar{
+  width:100%;height:5px;background:var(--bg3);
+  border-radius:3px;cursor:pointer;position:relative;
+  transition:height .15s;
+}
+.bp-bar:hover{height:7px}
+.bp-bar-fill{
+  height:100%;border-radius:3px;width:0%;
+  background:linear-gradient(90deg,var(--em2),var(--em3));
+  position:relative;pointer-events:none;
+}
+.bp-bar-fill::after{
+  content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);
+  width:12px;height:12px;border-radius:50%;background:var(--em2);
+  box-shadow:0 0 8px rgba(11,107,66,0.6);opacity:0;transition:opacity .2s;
+}
+.bp-bar:hover .bp-bar-fill::after{opacity:1}
+.bp-times{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:4px;font-variant-numeric:tabular-nums}
+.bp-controls{
+  display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;
+}
+.bp-btn{
+  background:none;border:none;color:var(--text3);
+  cursor:pointer;transition:all .2s;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;width:40px;height:40px;
+}
+.bp-btn:hover{color:var(--em);background:rgba(11,107,66,0.08)}
+.bp-btn-play{
+  width:56px;height:56px;font-size:22px;
+  background:linear-gradient(135deg,var(--em2),var(--em3));
+  color:white;box-shadow:0 6px 22px rgba(11,107,66,0.45);
+}
+.bp-btn-play:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(11,107,66,0.6);color:white;background:linear-gradient(135deg,var(--em3),var(--em2))}
+.bp-extras{
+  display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;
+  flex-wrap:wrap;
+}
+.bp-extra-btn{
+  padding:5px 12px;border-radius:20px;border:1px solid var(--border);
+  background:var(--bg2);color:var(--text3);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;font-family:'Tajawal',sans-serif;
+}
+.bp-extra-btn:hover{border-color:var(--em);color:var(--em)}
 
 /* TRANSCRIPT */
 .transcript-box{
@@ -1501,24 +1529,45 @@ footer{
   </div>
 
   <div style="max-width:1000px;margin:0 auto">
-    <div class="big-player" style="background:var(--card);margin:24px;border-radius:var(--r);border:1px solid var(--border)">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <span style="font-size:12px;font-weight:700;color:var(--text3)">00:00</span>
-        <span style="font-size:12px;font-weight:700;color:var(--text3)">45:23</span>
+    <!-- BIG PLAYER NEW -->
+    <div class="big-player">
+      <div class="bp-track">
+        <div class="bp-thumb" id="bp-thumb">🎙</div>
+        <div class="bp-info">
+          <div class="bp-title" id="bp-title">اختر درساً للاستماع</div>
+          <div class="bp-sheikh" id="bp-sheikh">—</div>
+        </div>
       </div>
-      <div class="big-progress" id="big-prog" onclick="seekAudio(event)">
-        <div class="big-progress-fill" id="big-fill"></div>
+      <!-- Progress -->
+      <div class="bp-progress-wrap">
+        <div class="bp-bar" id="big-prog" onclick="seekAudio(event)">
+          <div class="bp-bar-fill" id="big-fill"></div>
+        </div>
+        <div class="bp-times">
+          <span id="bp-cur">0:00</span>
+          <span id="bp-total">0:00</span>
+        </div>
       </div>
-      <div class="big-player-btns">
-        <button class="big-player-btn"><span class="ic" style="font-size:14px">↺</span></button>
-        <button class="big-player-btn"><span class="ic">⏮</span></button>
-        <button class="big-player-btn big-player-main" id="big-play" onclick="togglePlay()"><span class="ic">▶</span></button>
-        <button class="big-player-btn"><span class="ic">⏭</span></button>
-        <button class="big-player-btn"><span class="ic" style="font-size:14px">↶</span></button>
+      <!-- Buttons -->
+      <div class="bp-controls">
+        <button class="bp-btn" onclick="skipAudio(-30)" title="30ث للخلف" style="font-size:13px">↩30</button>
+        <button class="bp-btn" onclick="skipAudio(-10)" title="10ث للخلف" style="font-size:13px">↩10</button>
+        <button class="bp-btn bp-btn-play" id="big-play" onclick="togglePlay()">▶</button>
+        <button class="bp-btn" onclick="skipAudio(10)" title="10ث للأمام" style="font-size:13px">10↪</button>
+        <button class="bp-btn" onclick="skipAudio(30)" title="30ث للأمام" style="font-size:13px">30↪</button>
       </div>
-      <div style="display:flex;justify-content:center;gap:12px;margin-top:12px">
-        <button class="btn btn-outline btn-sm" style="font-size:12px"><span class="ic">⚡</span> السرعة: 1×</button>
-        <button class="btn btn-outline btn-sm" style="font-size:12px"><span class="ic">🔊</span></button>
+      <!-- Extras -->
+      <div class="bp-extras">
+        <span style="font-size:12px;color:var(--text3)">السرعة:</span>
+        <select id="bp-speed" onchange="setSpeed(this.value)" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:4px 8px;font-size:12px;font-family:'Tajawal',sans-serif;cursor:pointer;outline:none">
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+        </select>
+        <button class="bp-extra-btn" onclick="toggleMute()" id="bp-mute">🔊 الصوت</button>
+        <button class="bp-extra-btn" onclick="downloadCurrentAudio()">⬇ تحميل</button>
       </div>
     </div>
 
@@ -1810,10 +1859,20 @@ function showPlayer(url, title, sheikh) {
   if (url && url !== currentAudioUrl) {
     currentAudioUrl = url;
     audio.src = url;
-    audio.play();
+    audio.play().catch(e => showToast('تعذّر تشغيل الملف', 'error'));
     document.getElementById('player-title-el').textContent = title || 'درس';
     document.getElementById('player-sheikh-el').textContent = sheikh || '';
+    updateBigPlayer(title, sheikh);
   }
+}
+
+function downloadCurrentAudio() {
+  if (!currentAudioUrl) { showToast('لا يوجد درس مُحمَّل', 'error'); return; }
+  const a = document.createElement('a');
+  a.href = currentAudioUrl;
+  a.download = document.getElementById('bp-title')?.textContent || 'درس';
+  a.target = '_blank';
+  a.click();
 }
 
 function closePlayer() {
@@ -1860,26 +1919,40 @@ function seekTo(sec) {
   updateTranscript(sec);
 }
 // Audio events
+function updateBigPlayer(title, sheikh) {
+  const t = document.getElementById('bp-title');
+  const s = document.getElementById('bp-sheikh');
+  if (t) t.textContent = title || 'درس';
+  if (s) s.textContent = sheikh || '';
+}
+
 audio.addEventListener('play', () => {
   document.getElementById('player-play-icon').textContent = '⏸';
   const b = document.getElementById('big-play');
-  if (b) b.innerHTML = '<span class="ic">⏸</span>';
+  if (b) b.textContent = '⏸';
 });
 audio.addEventListener('pause', () => {
   document.getElementById('player-play-icon').textContent = '▶';
   const b = document.getElementById('big-play');
-  if (b) b.innerHTML = '<span class="ic">▶</span>';
+  if (b) b.textContent = '▶';
 });
 audio.addEventListener('timeupdate', () => {
   const cur = audio.currentTime, dur = audio.duration || 0;
   const pct = dur ? (cur/dur)*100 : 0;
   updateFill(pct);
-  document.getElementById('p-cur').textContent = fmtTime(cur);
-  document.getElementById('p-total').textContent = fmtTime(dur);
+  const fmt = fmtTime(cur), fmtD = fmtTime(dur);
+  document.getElementById('p-cur').textContent = fmt;
+  document.getElementById('p-total').textContent = fmtD;
+  const bc = document.getElementById('bp-cur');
+  const bt = document.getElementById('bp-total');
+  if (bc) bc.textContent = fmt;
+  if (bt) bt.textContent = fmtD;
   updateTranscript(Math.floor(cur));
 });
 audio.addEventListener('ended', () => {
   document.getElementById('player-play-icon').textContent = '▶';
+  const b = document.getElementById('big-play');
+  if (b) b.textContent = '▶';
 });
 audio.addEventListener('error', () => {
   showToast('تعذّر تحميل الملف الصوتي', 'error');
@@ -1935,34 +2008,38 @@ const aiTitles = { summary:'ملخص الدرس', questions:'أسئلة المر
 
 async function showAIResult(type) {
   const r = document.getElementById('ai-result');
-  const t = document.getElementById('ai-result-title');
+  const titleEl = document.getElementById('ai-result-title');
   const c = document.getElementById('ai-result-content');
 
-  // Get transcript text
+  // Get transcript — from Supabase or from page text
   const transcriptEl = document.querySelector('.transcript-box');
-  const transcript = currentTranscript || (transcriptEl ? transcriptEl.innerText.trim() : '');
-
-  if (!transcript || transcript.length < 50) {
-    showToast('لا يوجد نص للدرس بعد', 'error'); return;
+  let transcript = currentTranscript;
+  if (!transcript && transcriptEl) {
+    transcript = transcriptEl.innerText.replace(/\n+/g,' ').trim();
+  }
+  // Fallback: use the audio title as context
+  if (!transcript || transcript.length < 20) {
+    const title = document.getElementById('bp-title')?.textContent || '';
+    transcript = `درس بعنوان: ${title}`;
   }
 
-  t.textContent = aiTitles[type];
-  c.innerHTML = '<div style="display:flex;align-items:center;gap:8px;color:var(--text3)"><span style="animation:spin 1s linear infinite;display:inline-block">↻</span> جارٍ التوليد بالذكاء الاصطناعي...</div>';
+  titleEl.textContent = aiTitles[type];
+  c.innerHTML = '<div style="color:var(--text3);display:flex;align-items:center;gap:8px"><span style="display:inline-block;animation:spin 1s linear infinite">↻</span> جارٍ التوليد...</div>';
   r.classList.add('visible');
   r.scrollIntoView({behavior:'smooth', block:'nearest'});
 
   try {
     const result = await callGroq(aiPrompts[type](transcript.substring(0, 3000)));
-    // Format result
+    if (!result) throw new Error('empty');
     const html = result
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/^- (.+)$/gm, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+      .replace(/^[\-\*] (.+)$/gm, '<li style="margin-bottom:6px">$1</li>')
+      .replace(/(<li[^>]*>[\s\S]*?<\/li>)/g, '<ul style="padding-right:20px;margin-top:8px">$1</ul>')
       .replace(/\n\n/g, '</p><p style="margin-top:10px">')
-      .replace(/\n/g, '<br>');
-    c.innerHTML = `<p>${html}</p>`;
+      .replace(/\n/g, ' ');
+    c.innerHTML = `<div style="line-height:2">${html}</div>`;
   } catch(e) {
-    c.innerHTML = '<p style="color:var(--danger)">تعذّر الاتصال بالذكاء الاصطناعي. تحقق من مفتاح Groq.</p>';
+    c.innerHTML = '<p style="color:#e05252">⚠️ تحقق من مفتاح Groq في إعدادات الموقع</p>';
   }
 }
 
