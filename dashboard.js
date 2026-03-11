@@ -65,7 +65,7 @@
 //  SUPABASE CONFIG
 // ════════════════════════════════════════
 const SUPABASE_URL = 'https://qfmsplotijbnwderzbkv.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmbXNwbG90aWpibndkZXJ6Ymt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNjQwMzQsImV4cCI6MjA4ODY0MDAzNH0.FgDbDDU7ELt5wd6VihhTECTusHtA7vagr4widsp3XyA';
+const SUPABASE_KEY = 'sb_publishable_Wj59blcoBDlLwNifOIsnsQ_4WssBaqb';
 
 const HEADERS = {
   'apikey': SUPABASE_KEY,
@@ -245,8 +245,7 @@ async function initApp() {
       if (r.key === 'api_cloudinary_name')   API_KEYS.cloudinary_name    = r.value;
       if (r.key === 'api_cloudinary_preset') API_KEYS.cloudinary_preset  = r.value;
     });
-    // Sync Groq key to localStorage too (legacy)
-    if (API_KEYS.groq) localStorage.setItem('groq_api_key', API_KEYS.groq);
+    localStorage.removeItem('groq_api_key');
   } catch(e) { console.warn('Could not load API keys:', e); }
 
   // Pre-load dropdowns
@@ -279,7 +278,7 @@ async function loadDashboard() {
     document.getElementById('top-audios-chart').innerHTML = audios.length
       ? audios.map(a => `
           <div class="chart-bar-item">
-            <div class="chart-bar-label"><span>${a.title?.substring(0,30)}...</span><span>${a.play_count||0}</span></div>
+            <div class="chart-bar-label"><span>${esc(a.title?.substring(0,30))}...</span><span>${a.play_count||0}</span></div>
             <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${((a.play_count||0)/max*100)}%;background:var(--emerald-glow)"></div></div>
           </div>`)
         .join('')
@@ -342,7 +341,7 @@ async function loadAudios() {
       </tr>
     `).join('');
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ في التحميل: ${e.message}</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ في التحميل: ${esc(e.message)}</p></div></td></tr>`;
   }
 }
 
@@ -354,6 +353,7 @@ async function saveAudio() {
 
   if (!title) { showToast('العنوان مطلوب', 'error'); return; }
   if (!audioUrl) { showToast('رابط الصوت مطلوب', 'error'); return; }
+  try { const u = new URL(audioUrl); if (!['http:','https:'].includes(u.protocol)) throw new Error(); } catch { showToast('رابط الصوت غير صحيح، يجب أن يبدأ بـ http أو https', 'error'); return; }
 
   btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
   btn.disabled = true;
@@ -452,7 +452,7 @@ async function loadBooks() {
         </div>
       </div>`;
   } catch(e) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${e.message}</p></div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${esc(e.message)}</p></div>`;
   }
 }
 
@@ -466,6 +466,7 @@ async function saveBook() {
   if (!title) { showToast('اسم الكتاب مطلوب', 'error'); return; }
   if (!author) { showToast('اسم المؤلف مطلوب', 'error'); return; }
   if (!pdfUrl) { showToast('رابط PDF مطلوب', 'error'); return; }
+  try { const u = new URL(pdfUrl); if (!['http:','https:'].includes(u.protocol)) throw new Error(); } catch { showToast('رابط PDF غير صحيح، يجب أن يبدأ بـ http أو https', 'error'); return; }
 
   btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
   btn.disabled = true;
@@ -558,7 +559,7 @@ async function loadHadiths() {
         </tr>`;
     }).join('');
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${e.message}</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${esc(e.message)}</p></div></td></tr>`;
   }
 }
 
@@ -664,7 +665,7 @@ async function loadSheikhs() {
         </div>
       </div>`;
   } catch(e) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${e.message}</p></div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${esc(e.message)}</p></div>`;
   }
 }
 
@@ -750,7 +751,7 @@ async function loadCategories() {
       </div>
     `).join('');
   } catch(e) {
-    list.innerHTML = `<div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${e.message}</p></div>`;
+    list.innerHTML = `<div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${esc(e.message)}</p></div>`;
   }
 }
 
@@ -1086,9 +1087,9 @@ async function doDelete() {
     if (page) loadPageData(page.id.replace('page-',''));
   } catch(e) {
     showToast('خطأ في الحذف: ' + e.message, 'error');
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> نعم، احذف';
+    btn.disabled = false;
   }
-  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> نعم، احذف';
-  btn.disabled = false;
 }
 
 function closeConfirm() {
@@ -1120,7 +1121,7 @@ function closeModal(id) {
 }
 
 document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+  m.addEventListener('click', e => { if (e.target === m && m.id) closeModal(m.id); });
 });
 
 function showToast(msg, type = 'success') {
@@ -1237,6 +1238,7 @@ async function uploadToStorage(bucket, file, folder = '') {
     }
 
     xhr.onload = () => {
+      uploadToStorage._onProgress = null;
       if (xhr.status >= 200 && xhr.status < 300) {
         resolve(`${SUPABASE_URL}/storage/v1/object/public/${bucket}/${filename}`);
       } else {
@@ -1250,7 +1252,7 @@ async function uploadToStorage(bucket, file, folder = '') {
         reject(new Error(msg));
       }
     };
-    xhr.onerror = () => reject(new Error('خطأ في الاتصال بـ Supabase Storage'));
+    xhr.onerror = () => { uploadToStorage._onProgress = null; reject(new Error('خطأ في الاتصال بـ Supabase Storage')); };
     xhr.send(file);
   });
 }
@@ -1398,10 +1400,9 @@ function switchCoverTab(tab) {
   document.getElementById('cover-tab-url').style.color        = isUpload ? 'var(--text-muted)' : 'white';
 }
 
-// ── Groq key persistence ──
+// ── Groq key from memory (API_KEYS loaded from Supabase) ──
 document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('groq_api_key');
-  if (saved) document.getElementById('groq-api-key').value = saved;
+  if (API_KEYS.groq) document.getElementById('groq-api-key').value = API_KEYS.groq;
 });
 document.getElementById('audio-do-transcribe').addEventListener('change', function() {
   document.getElementById('groq-key-wrap').style.display = this.checked ? 'block' : 'none';
@@ -1418,9 +1419,6 @@ async function transcribeWithGroq(file, apiKey) {
   resultBox.style.display = 'block';
   textArea.value = '';
   statsEl.textContent = '⏳ جارٍ التحويل... قد يستغرق دقيقة أو أكثر حسب حجم الملف';
-
-  // Save key
-  localStorage.setItem('groq_api_key', apiKey);
 
   // Groq has 25MB limit — warn if larger
   if (file.size > 25 * 1024 * 1024) {
@@ -1855,7 +1853,7 @@ async function saveHadith() {
       showToast(schedDate ? `تمت الجدولة ليوم ${schedDate} ✅` : 'تم إضافة الحديث ✅', 'success');
     }
     closeModal('modal-hadith');
-    loadHadiths();
+    await loadHadiths();
   } catch(e) {
     showToast('خطأ: ' + e.message, 'error');
   }

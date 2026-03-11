@@ -49,12 +49,6 @@ window.addEventListener('scroll', () => {
 const audio = document.getElementById('real-audio');
 let currentAudioUrl = '';
 
-function fmtTime(s) {
-  if (isNaN(s)) return '0:00';
-  const m = Math.floor(s/60), sec = Math.floor(s%60);
-  return `${m}:${sec.toString().padStart(2,'0')}`;
-}
-
 function showPlayer(url, title, sheikh, thumbEmoji) {
   const fp = document.getElementById('floating-player');
   fp.classList.add('visible');
@@ -285,7 +279,7 @@ async function runSearch(q) {
 
     results.innerHTML = items.map(r => {
       const icon = r.type === 'audio' ? '🎙' : '📖';
-      const action = r.type === 'audio' ? "openAudioDetail('" + r.id + "')" : "showPage('books')";
+      const action = r.type === 'audio' ? "openAudioDetail('" + escHtml(String(r.id)) + "')" : "showPage('books')";
       return '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor=\'var(--em)\'" onmouseout="this.style.borderColor=\'var(--border)\'" onclick="' + action + '">'
         + '<div style="width:42px;height:42px;border-radius:10px;background:rgba(11,107,66,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">' + icon + '</div>'
         + '<div><div style="font-size:15px;font-weight:700;margin-bottom:3px">' + escHtml(r.title) + '</div>'
@@ -504,17 +498,17 @@ function renderPrayers(times){
   `).join('');
 
   // Start countdown
-  startCountdown(prayers[nextIdx].name, minsArr[nextIdx], nowMins, nextIdx===0 && nowMins > minsArr[0]);
+  startCountdown(prayers[nextIdx].name, minsArr[nextIdx]);
 }
 
-function startCountdown(name, targetMins, nowMins, isTomorrow){
+function startCountdown(name, targetMins){
   if(prayerCountdownInterval) clearInterval(prayerCountdownInterval);
 
   function update(){
     const now = new Date();
     const curMins = now.getHours()*60+now.getMinutes();
     let diff = targetMins - curMins;
-    if(isTomorrow || diff < 0) diff += 1440;
+    if(diff < 0) diff += 1440;
     const h = Math.floor(diff/60);
     const m = diff % 60;
     const txt = h>0 ? `${h} ساعة و ${m} دقيقة` : `${m} دقيقة`;
@@ -584,11 +578,11 @@ function closePrayerModal(){
 function renderCitiesGrid(list){
   const grid = document.getElementById('cities-grid');
   grid.innerHTML = list.map(city=>`
-    <button class="city-btn${city.name===currentCity.name?' selected':''}" onclick="selectCity('${city.name}')">
+    <button class="city-btn${city.name===currentCity.name?' selected':''}" onclick="selectCity('${city.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">
       <span class="city-flag">${city.flag}</span>
       <div style="text-align:right">
-        <div style="font-size:13px;font-weight:700">${city.name}</div>
-        <div style="font-size:11px;opacity:.6">${city.country}</div>
+        <div style="font-size:13px;font-weight:700">${escHtml(city.name)}</div>
+        <div style="font-size:11px;opacity:.6">${escHtml(city.country)}</div>
       </div>
     </button>
   `).join('');
@@ -603,6 +597,7 @@ function filterCities(){
 function selectCity(name){
   const city = CITIES.find(c=>c.name===name);
   if(city){ loadPrayerTimes(city); closePrayerModal(); showToast(`تم اختيار ${city.name} 🕌`,'success'); }
+  else { showToast('المدينة غير موجودة', 'error'); }
 }
 
 // Close modal on backdrop click
@@ -615,8 +610,8 @@ document.getElementById('prayer-modal').addEventListener('click', function(e){
   // Try to restore saved city
   try {
     const saved = localStorage.getItem('prayerCity');
-    if(saved){ const c = JSON.parse(saved); if(c && c.lat) { currentCity=c; } }
-  } catch(e){}
+    if(saved){ const c = JSON.parse(saved); if(c && typeof c.lat === 'number' && typeof c.lng === 'number') { currentCity=c; } }
+  } catch(e){ localStorage.removeItem('prayerCity'); }
   loadPrayerTimes(currentCity);
 })();
 
@@ -626,7 +621,7 @@ document.getElementById('prayer-modal').addEventListener('click', function(e){
 
 // ══ SUPABASE CONFIG ══
 const SUPABASE_URL = 'https://qfmsplotijbnwderzbkv.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmbXNwbG90aWpibndkZXJ6Ymt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNjQwMzQsImV4cCI6MjA4ODY0MDAzNH0.FgDbDDU7ELt5wd6VihhTECTusHtA7vagr4widsp3XyA';
+const SUPABASE_KEY = 'sb_publishable_Wj59blcoBDlLwNifOIsnsQ_4WssBaqb';
 
 // ══ DB HELPER ══
 async function dbQuery(table, options = {}) {
@@ -673,30 +668,6 @@ async function dbUpdate(table, filter, data) {
   return res.json();
 }
 
-// ══ LOAD HADITH OF THE DAY ══
-async function loadHadithOfDay() {
-  try {
-    const data = await dbQuery('hadiths', {
-      select: 'text,source,type',
-      filter: 'is_active=eq.true',
-      limit: 1
-    });
-    if (data && data.length > 0) {
-      const h = data[0];
-      // Update hero hadith card
-      const heroText = document.querySelector('.hero-hadith-text');
-      const heroSrc  = document.querySelector('.hero-hadith-src');
-      if (heroText) heroText.textContent = `«${h.text}»`;
-      if (heroSrc)  heroSrc.textContent  = h.source || '';
-      // Update hadith section
-      const secText = document.querySelector('.hadith-text');
-      if (secText) secText.textContent = `«${h.text}»`;
-      const secSrc = document.querySelector('.hadith-source');
-      if (secSrc) secSrc.textContent = h.source || '';
-    }
-  } catch(e) { console.log('Hadith load error:', e); }
-}
-
 // ══ LOAD AUDIOS ══
 async function loadAudios() {
   try {
@@ -725,7 +696,7 @@ async function loadAudios() {
             </div>
           </div>
           <div class="audio-body">
-            <h3>${a.title}</h3>
+            <h3>${escHtml(a.title)}</h3>
             <div class="audio-meta">
               <span>👤 ${a.sheikhs?.name || 'غير محدد'}</span>
               <span>🎧 ${a.play_count || 0}</span>
@@ -781,19 +752,19 @@ async function loadBooks() {
                 ? `<img src="${b.cover_url}" style="width:100%;height:100%;object-fit:cover">`
                 : `<div class="book-cover-inner">
                     <div class="book-icon">${icons[i % icons.length]}</div>
-                    <div class="book-cover-title">${b.title}</div>
-                    <div class="book-cover-author">${b.author || ''}</div>
+                    <div class="book-cover-title">${escHtml(b.title)}</div>
+                    <div class="book-cover-author">${escHtml(b.author || '')}</div>
                   </div>`
               }
             </div>
           </div>
           <div class="book-info">
-            <h4>${b.title}</h4>
-            <span>${b.author || ''}</span>
+            <h4>${escHtml(b.title)}</h4>
+            <span>${escHtml(b.author || '')}</span>
             <div class="book-stars">${'★'.repeat(Math.round(b.rating||5))}${'☆'.repeat(5-Math.round(b.rating||5))}</div>
             <div class="book-actions">
-              ${b.pdf_url ? `<button class="book-btn book-btn-read" onclick="window.open('${b.pdf_url}','_blank')">📖 قراءة</button>` : ''}
-              ${b.pdf_url ? `<button class="book-btn book-btn-dl" onclick="downloadBook('${b.id}','${b.pdf_url}')">⬇</button>` : ''}
+              ${b.pdf_url && /^https?:\/\//i.test(b.pdf_url) ? `<button class="book-btn book-btn-read" onclick="window.open('${escHtml(b.pdf_url)}','_blank','noopener,noreferrer')">📖 قراءة</button>` : ''}
+              ${b.pdf_url && /^https?:\/\//i.test(b.pdf_url) ? `<button class="book-btn book-btn-dl" onclick="downloadBook('${escHtml(String(b.id))}','${escHtml(b.pdf_url)}')">⬇</button>` : ''}
             </div>
           </div>
         </div>
@@ -805,49 +776,6 @@ async function loadBooks() {
     if (statEls[1]) statEls[1].textContent = data.length + '+';
 
   } catch(e) { console.log('Books load error:', e); }
-}
-
-// ══ LOAD SHEIKHS ══
-async function loadSheikhs() {
-  try {
-    const data = await dbQuery('sheikhs', { select: 'id,name,bio,image_url' });
-    if (!data || data.length === 0) return;
-
-    const grids = document.querySelectorAll('.sheikhs-grid');
-    grids.forEach(grid => {
-      grid.innerHTML = data.map(s => `
-        <div class="sheikh-card">
-          <div class="sheikh-avatar">
-            ${s.image_url
-              ? `<img src="${s.image_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
-              : s.name.charAt(2)
-            }
-          </div>
-          <h3>${s.name}</h3>
-          <span>${s.bio ? s.bio.substring(0,40)+'...' : ''}</span>
-        </div>
-      `).join('');
-    });
-
-    // Sheikh page
-    const sheikhPage = document.querySelector('#page-sheikhs-page .section > div');
-    if (sheikhPage) {
-      sheikhPage.innerHTML = data.map(s => `
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;display:flex;gap:20px;align-items:center;cursor:pointer;transition:all .2s">
-          <div class="sheikh-avatar" style="width:80px;height:80px;font-size:32px;flex-shrink:0">
-            ${s.image_url
-              ? `<img src="${s.image_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
-              : s.name.charAt(2)
-            }
-          </div>
-          <div>
-            <h3 style="font-size:18px;font-weight:700;margin-bottom:6px">${s.name}</h3>
-            <p style="font-size:13px;color:var(--text3);line-height:1.7">${s.bio || ''}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-  } catch(e) { console.log('Sheikhs load error:', e); }
 }
 
 // ══ LOAD SETTINGS ══
@@ -951,8 +879,7 @@ async function downloadBook(id, url) {
     setTimeout(() => { URL.revokeObjectURL(blobUrl); a.remove(); }, 3000);
     showToast('بدأ تحميل الكتاب ⬇', 'success');
     await dbInsert('analytics', { event: 'download', item_id: id, item_type: 'book' });
-    showToast('جارٍ فتح الكتاب 📖', 'success');
-  } catch(e) { showToast('جارٍ فتح الكتاب 📖', 'success'); }
+  } catch(e) { showToast('حدث خطأ أثناء التحميل', 'error'); }
 }
 
 // ══ OPEN AUDIO DETAIL ══
@@ -995,8 +922,8 @@ async function openAudioDetail(id) {
         currentTranscript = a.transcript;
         const sentences = a.transcript.split(/(?<=[.،؟!])\s+/).filter(s => s.trim().length > 8);
         box.innerHTML = sentences.length
-          ? sentences.map((s, i) => `<span class="transcript-sentence" data-idx="${i}" onclick="seekTo(${i * 30})">${s.trim()} </span>`).join('')
-          : `<p style="color:var(--text3)">${a.transcript}</p>`;
+          ? sentences.map((s, i) => `<span class="transcript-sentence" data-idx="${i}" onclick="seekTo(${i * 30})">${escHtml(s.trim())} </span>`).join('')
+          : `<p style="color:var(--text3)">${escHtml(a.transcript)}</p>`;
       } else {
         currentTranscript = '';
         box.innerHTML = '<span style="color:var(--text3)">لا يوجد نص متاح لهذا الدرس</span>';
@@ -1056,6 +983,20 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+
+// ════════════════════════════════════════
+//  CONTACT MODAL
+// ════════════════════════════════════════
+function openContactModal() {
+  document.getElementById('contact-form').style.display = 'block';
+  document.getElementById('contact-success').style.display = 'none';
+  document.getElementById('contact-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeContactModal() {
+  document.getElementById('contact-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 // ════════════════════════════════════════
 //  CONTACT FORM — Formspree
