@@ -65,7 +65,7 @@
 //  SUPABASE CONFIG
 // ════════════════════════════════════════
 const SUPABASE_URL = 'https://qfmsplotijbnwderzbkv.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Wj59blcoBDlLwNifOIsnsQ_4WssBaqb';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmbXNwbG90aWpibndkZXJ6Ymt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNjQwMzQsImV4cCI6MjA4ODY0MDAzNH0.FgDbDDU7ELt5wd6VihhTECTusHtA7vagr4widsp3XyA';
 
 const HEADERS = {
   'apikey': SUPABASE_KEY,
