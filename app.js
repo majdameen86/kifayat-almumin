@@ -985,6 +985,20 @@ if ('serviceWorker' in navigator) {
 
 
 // ════════════════════════════════════════
+//  CONTACT MODAL
+// ════════════════════════════════════════
+function openContactModal() {
+  document.getElementById('contact-form').style.display = 'block';
+  document.getElementById('contact-success').style.display = 'none';
+  document.getElementById('contact-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeContactModal() {
+  document.getElementById('contact-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ════════════════════════════════════════
 //  CONTACT FORM — Formspree
 // ════════════════════════════════════════
 async function submitContact() {

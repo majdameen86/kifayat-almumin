@@ -28,7 +28,7 @@
       <div class="nav-link" onclick="showPage('books',this)">المكتبة</div>
       <div class="nav-link" onclick="showPage('sheikhs-page',this)">الشيوخ</div>
       <div class="nav-link" onclick="showPage('tasbih-page',this)">المسبحة</div>
-      <div class="nav-link" onclick="showPage('contact',this)">اتصل بنا</div>
+      <div class="nav-link" onclick="openContactModal()">اتصل بنا</div>
       <div class="nav-link" onclick="showPage('search-page',this)">البحث</div>
     </div>
     <div class="nav-actions">
@@ -764,75 +764,69 @@
 </div><!-- ══════════════════════════════════════════
      CONTACT PAGE
 ══════════════════════════════════════════ -->
-<div class="page" id="page-contact">
-  <div style="background:linear-gradient(160deg,var(--em-deep),#0b3d24);padding:60px 24px 40px">
-    <div style="max-width:700px;margin:0 auto;text-align:center">
-      <div class="sec-label" style="margin-bottom:12px"><span class="ic">✉</span> تواصل معنا</div>
-      <h1 style="font-family:'Amiri',serif;font-size:clamp(28px,4vw,42px);color:white;margin-bottom:12px">اتصل بنا</h1>
-      <p style="color:rgba(255,255,255,0.6);font-size:15px">نسعد بتواصلك معنا في أي استفسار أو اقتراح</p>
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contact-modal" onclick="if(event.target===this)closeContactModal()" style="z-index:600">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header" style="border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:20px">
+      <h3 style="font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px"><span class="ic">✉</span> اتصل بنا</h3>
+      <button onclick="closeContactModal()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3)">✕</button>
     </div>
-  </div>
 
-  <div style="max-width:700px;margin:0 auto;padding:50px 24px 80px">
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px">
+    <div id="contact-success" style="display:none;background:rgba(11,107,66,0.1);border:1px solid rgba(11,107,66,0.3);border-radius:14px;padding:24px;text-align:center;margin-bottom:24px">
+      <div style="font-size:48px;margin-bottom:12px">✅</div>
+      <h3 style="font-size:18px;font-weight:700;color:var(--em);margin-bottom:8px">تم إرسال رسالتك بنجاح</h3>
+      <p style="color:var(--text3);font-size:14px">سنرد عليك في أقرب وقت ممكن على بريدك الإلكتروني.</p>
+      <button onclick="closeContactModal()" style="margin-top:16px;padding:10px 28px;background:var(--em);color:white;border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer">إغلاق</button>
+    </div>
 
-      <div id="contact-success" style="display:none;background:rgba(11,107,66,0.1);border:1px solid rgba(11,107,66,0.3);border-radius:14px;padding:24px;text-align:center;margin-bottom:24px">
-        <div style="font-size:48px;margin-bottom:12px">✅</div>
-        <h3 style="font-size:18px;font-weight:700;color:var(--em);margin-bottom:8px">تم إرسال رسالتك بنجاح</h3>
-        <p style="color:var(--text3);font-size:14px">سنرد عليك في أقرب وقت ممكن على بريدك الإلكتروني.</p>
+    <div id="contact-form">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div>
+          <label style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text2)">الاسم الكامل *</label>
+          <input id="cf-name" type="text" placeholder="اسمك الكريم"
+            style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s"
+            onfocus="this.style.borderColor='var(--em)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+        <div>
+          <label style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text2)">البريد الإلكتروني *</label>
+          <input id="cf-email" type="email" placeholder="example@gmail.com"
+            style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s"
+            onfocus="this.style.borderColor='var(--em)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
       </div>
-
-      <div id="contact-form">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-          <div>
-            <label style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text2)">الاسم الكامل *</label>
-            <input id="cf-name" type="text" placeholder="اسمك الكريم"
-              style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s"
-              onfocus="this.style.borderColor='var(--em)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-          <div>
-            <label style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text2)">البريد الإلكتروني *</label>
-            <input id="cf-email" type="email" placeholder="example@gmail.com"
-              style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s"
-              onfocus="this.style.borderColor='var(--em)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-        </div>
-        <div style="margin-bottom:16px">
-          <label style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text2)">الموضوع</label>
-          <select id="cf-subject"
-            style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;cursor:pointer">
-            <option>استفسار عام</option>
-            <option>اقتراح تحسين</option>
-            <option>الإبلاغ عن خطأ</option>
-            <option>طلب محتوى</option>
-            <option>تعاون وشراكة</option>
-          </select>
-        </div>
-        <div style="margin-bottom:24px">
-          <label style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text2)">الرسالة *</label>
-          <textarea id="cf-message" placeholder="اكتب رسالتك هنا..." rows="6"
-            style="width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;resize:vertical;outline:none;transition:border-color .2s;line-height:1.7"
-            onfocus="this.style.borderColor='var(--em)'" onblur="this.style.borderColor='var(--border)'"></textarea>
-        </div>
-        <button onclick="submitContact()" id="cf-submit"
-          style="width:100%;padding:14px;background:linear-gradient(135deg,var(--em2),var(--em-dark));color:white;border:none;border-radius:12px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(11,107,66,0.35)"
-          onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-          <span class="ic">✉</span> إرسال الرسالة
-        </button>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text2)">الموضوع</label>
+        <select id="cf-subject"
+          style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;cursor:pointer">
+          <option>استفسار عام</option>
+          <option>اقتراح تحسين</option>
+          <option>الإبلاغ عن خطأ</option>
+          <option>طلب محتوى</option>
+          <option>تعاون وشراكة</option>
+        </select>
       </div>
+      <div style="margin-bottom:24px">
+        <label style="display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text2)">الرسالة *</label>
+        <textarea id="cf-message" placeholder="اكتب رسالتك هنا..." rows="5"
+          style="width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;resize:vertical;outline:none;transition:border-color .2s;line-height:1.7"
+          onfocus="this.style.borderColor='var(--em)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      </div>
+      <button onclick="submitContact()" id="cf-submit"
+        style="width:100%;padding:14px;background:linear-gradient(135deg,var(--em2),var(--em-dark));color:white;border:none;border-radius:12px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(11,107,66,0.35)"
+        onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+        <span class="ic">✉</span> إرسال الرسالة
+      </button>
     </div>
 
     <!-- Contact info -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:28px">
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center">
-        <div style="font-size:28px;margin-bottom:10px">✉</div>
-        <h4 style="font-size:13px;font-weight:700;margin-bottom:6px">البريد الإلكتروني</h4>
-        <p style="font-size:12px;color:var(--text3)" id="contact-email-display">majdameen86@gmail.com</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;margin-bottom:6px">✉</div>
+        <p style="font-size:11px;color:var(--text3)" id="contact-email-display">majdameen86@gmail.com</p>
       </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center" id="contact-wa-card" style="display:none">
-        <div style="font-size:28px;margin-bottom:10px">💬</div>
-        <h4 style="font-size:13px;font-weight:700;margin-bottom:6px">واتساب</h4>
-        <p style="font-size:12px;color:var(--text3)" id="contact-wa-display">—</p>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center" id="contact-wa-card" style="display:none">
+        <div style="font-size:22px;margin-bottom:6px">💬</div>
+        <p style="font-size:11px;color:var(--text3)" id="contact-wa-display">—</p>
       </div>
     </div>
   </div>
