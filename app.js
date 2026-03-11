@@ -49,12 +49,6 @@ window.addEventListener('scroll', () => {
 const audio = document.getElementById('real-audio');
 let currentAudioUrl = '';
 
-function fmtTime(s) {
-  if (isNaN(s)) return '0:00';
-  const m = Math.floor(s/60), sec = Math.floor(s%60);
-  return `${m}:${sec.toString().padStart(2,'0')}`;
-}
-
 function showPlayer(url, title, sheikh, thumbEmoji) {
   const fp = document.getElementById('floating-player');
   fp.classList.add('visible');
@@ -603,6 +597,7 @@ function filterCities(){
 function selectCity(name){
   const city = CITIES.find(c=>c.name===name);
   if(city){ loadPrayerTimes(city); closePrayerModal(); showToast(`تم اختيار ${city.name} 🕌`,'success'); }
+  else { showToast('المدينة غير موجودة', 'error'); }
 }
 
 // Close modal on backdrop click
@@ -615,8 +610,8 @@ document.getElementById('prayer-modal').addEventListener('click', function(e){
   // Try to restore saved city
   try {
     const saved = localStorage.getItem('prayerCity');
-    if(saved){ const c = JSON.parse(saved); if(c && c.lat) { currentCity=c; } }
-  } catch(e){}
+    if(saved){ const c = JSON.parse(saved); if(c && typeof c.lat === 'number' && typeof c.lng === 'number') { currentCity=c; } }
+  } catch(e){ localStorage.removeItem('prayerCity'); }
   loadPrayerTimes(currentCity);
 })();
 
@@ -671,30 +666,6 @@ async function dbUpdate(table, filter, data) {
     body: JSON.stringify(data)
   });
   return res.json();
-}
-
-// ══ LOAD HADITH OF THE DAY ══
-async function loadHadithOfDay() {
-  try {
-    const data = await dbQuery('hadiths', {
-      select: 'text,source,type',
-      filter: 'is_active=eq.true',
-      limit: 1
-    });
-    if (data && data.length > 0) {
-      const h = data[0];
-      // Update hero hadith card
-      const heroText = document.querySelector('.hero-hadith-text');
-      const heroSrc  = document.querySelector('.hero-hadith-src');
-      if (heroText) heroText.textContent = `«${h.text}»`;
-      if (heroSrc)  heroSrc.textContent  = h.source || '';
-      // Update hadith section
-      const secText = document.querySelector('.hadith-text');
-      if (secText) secText.textContent = `«${h.text}»`;
-      const secSrc = document.querySelector('.hadith-source');
-      if (secSrc) secSrc.textContent = h.source || '';
-    }
-  } catch(e) { console.log('Hadith load error:', e); }
 }
 
 // ══ LOAD AUDIOS ══
@@ -792,8 +763,8 @@ async function loadBooks() {
             <span>${escHtml(b.author || '')}</span>
             <div class="book-stars">${'★'.repeat(Math.round(b.rating||5))}${'☆'.repeat(5-Math.round(b.rating||5))}</div>
             <div class="book-actions">
-              ${b.pdf_url ? `<button class="book-btn book-btn-read" onclick="window.open('${escHtml(b.pdf_url)}','_blank')">📖 قراءة</button>` : ''}
-              ${b.pdf_url ? `<button class="book-btn book-btn-dl" onclick="downloadBook('${escHtml(String(b.id))}','${escHtml(b.pdf_url)}')">⬇</button>` : ''}
+              ${b.pdf_url && /^https?:\/\//i.test(b.pdf_url) ? `<button class="book-btn book-btn-read" onclick="window.open('${escHtml(b.pdf_url)}','_blank','noopener,noreferrer')">📖 قراءة</button>` : ''}
+              ${b.pdf_url && /^https?:\/\//i.test(b.pdf_url) ? `<button class="book-btn book-btn-dl" onclick="downloadBook('${escHtml(String(b.id))}','${escHtml(b.pdf_url)}')">⬇</button>` : ''}
             </div>
           </div>
         </div>
@@ -805,49 +776,6 @@ async function loadBooks() {
     if (statEls[1]) statEls[1].textContent = data.length + '+';
 
   } catch(e) { console.log('Books load error:', e); }
-}
-
-// ══ LOAD SHEIKHS ══
-async function loadSheikhs() {
-  try {
-    const data = await dbQuery('sheikhs', { select: 'id,name,bio,image_url' });
-    if (!data || data.length === 0) return;
-
-    const grids = document.querySelectorAll('.sheikhs-grid');
-    grids.forEach(grid => {
-      grid.innerHTML = data.map(s => `
-        <div class="sheikh-card">
-          <div class="sheikh-avatar">
-            ${s.image_url
-              ? `<img src="${escHtml(s.image_url)}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
-              : escHtml(s.name.charAt(0))
-            }
-          </div>
-          <h3>${escHtml(s.name)}</h3>
-          <span>${s.bio ? escHtml(s.bio.substring(0,40))+'...' : ''}</span>
-        </div>
-      `).join('');
-    });
-
-    // Sheikh page
-    const sheikhPage = document.querySelector('#page-sheikhs-page .section > div');
-    if (sheikhPage) {
-      sheikhPage.innerHTML = data.map(s => `
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;display:flex;gap:20px;align-items:center;cursor:pointer;transition:all .2s">
-          <div class="sheikh-avatar" style="width:80px;height:80px;font-size:32px;flex-shrink:0">
-            ${s.image_url
-              ? `<img src="${escHtml(s.image_url)}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
-              : escHtml(s.name.charAt(0))
-            }
-          </div>
-          <div>
-            <h3 style="font-size:18px;font-weight:700;margin-bottom:6px">${escHtml(s.name)}</h3>
-            <p style="font-size:13px;color:var(--text3);line-height:1.7">${escHtml(s.bio || '')}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-  } catch(e) { console.log('Sheikhs load error:', e); }
 }
 
 // ══ LOAD SETTINGS ══
@@ -994,8 +922,8 @@ async function openAudioDetail(id) {
         currentTranscript = a.transcript;
         const sentences = a.transcript.split(/(?<=[.،؟!])\s+/).filter(s => s.trim().length > 8);
         box.innerHTML = sentences.length
-          ? sentences.map((s, i) => `<span class="transcript-sentence" data-idx="${i}" onclick="seekTo(${i * 30})">${s.trim()} </span>`).join('')
-          : `<p style="color:var(--text3)">${a.transcript}</p>`;
+          ? sentences.map((s, i) => `<span class="transcript-sentence" data-idx="${i}" onclick="seekTo(${i * 30})">${escHtml(s.trim())} </span>`).join('')
+          : `<p style="color:var(--text3)">${escHtml(a.transcript)}</p>`;
       } else {
         currentTranscript = '';
         box.innerHTML = '<span style="color:var(--text3)">لا يوجد نص متاح لهذا الدرس</span>';

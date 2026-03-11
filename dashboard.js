@@ -279,7 +279,7 @@ async function loadDashboard() {
     document.getElementById('top-audios-chart').innerHTML = audios.length
       ? audios.map(a => `
           <div class="chart-bar-item">
-            <div class="chart-bar-label"><span>${a.title?.substring(0,30)}...</span><span>${a.play_count||0}</span></div>
+            <div class="chart-bar-label"><span>${esc(a.title?.substring(0,30))}...</span><span>${a.play_count||0}</span></div>
             <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${((a.play_count||0)/max*100)}%;background:var(--emerald-glow)"></div></div>
           </div>`)
         .join('')
@@ -342,7 +342,7 @@ async function loadAudios() {
       </tr>
     `).join('');
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ في التحميل: ${e.message}</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ في التحميل: ${esc(e.message)}</p></div></td></tr>`;
   }
 }
 
@@ -354,6 +354,7 @@ async function saveAudio() {
 
   if (!title) { showToast('العنوان مطلوب', 'error'); return; }
   if (!audioUrl) { showToast('رابط الصوت مطلوب', 'error'); return; }
+  try { const u = new URL(audioUrl); if (!['http:','https:'].includes(u.protocol)) throw new Error(); } catch { showToast('رابط الصوت غير صحيح، يجب أن يبدأ بـ http أو https', 'error'); return; }
 
   btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
   btn.disabled = true;
@@ -452,7 +453,7 @@ async function loadBooks() {
         </div>
       </div>`;
   } catch(e) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${e.message}</p></div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${esc(e.message)}</p></div>`;
   }
 }
 
@@ -466,6 +467,7 @@ async function saveBook() {
   if (!title) { showToast('اسم الكتاب مطلوب', 'error'); return; }
   if (!author) { showToast('اسم المؤلف مطلوب', 'error'); return; }
   if (!pdfUrl) { showToast('رابط PDF مطلوب', 'error'); return; }
+  try { const u = new URL(pdfUrl); if (!['http:','https:'].includes(u.protocol)) throw new Error(); } catch { showToast('رابط PDF غير صحيح، يجب أن يبدأ بـ http أو https', 'error'); return; }
 
   btn.innerHTML = '<span class="spinner"></span> جارٍ الحفظ...';
   btn.disabled = true;
@@ -558,7 +560,7 @@ async function loadHadiths() {
         </tr>`;
     }).join('');
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${e.message}</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${esc(e.message)}</p></div></td></tr>`;
   }
 }
 
@@ -664,7 +666,7 @@ async function loadSheikhs() {
         </div>
       </div>`;
   } catch(e) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${e.message}</p></div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${esc(e.message)}</p></div>`;
   }
 }
 
@@ -750,7 +752,7 @@ async function loadCategories() {
       </div>
     `).join('');
   } catch(e) {
-    list.innerHTML = `<div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${e.message}</p></div>`;
+    list.innerHTML = `<div class="empty-state"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--danger)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><p>خطأ: ${esc(e.message)}</p></div>`;
   }
 }
 
