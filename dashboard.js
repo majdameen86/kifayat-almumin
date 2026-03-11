@@ -245,8 +245,7 @@ async function initApp() {
       if (r.key === 'api_cloudinary_name')   API_KEYS.cloudinary_name    = r.value;
       if (r.key === 'api_cloudinary_preset') API_KEYS.cloudinary_preset  = r.value;
     });
-    // Sync Groq key to localStorage too (legacy)
-    if (API_KEYS.groq) localStorage.setItem('groq_api_key', API_KEYS.groq);
+    localStorage.removeItem('groq_api_key');
   } catch(e) { console.warn('Could not load API keys:', e); }
 
   // Pre-load dropdowns
@@ -1401,10 +1400,9 @@ function switchCoverTab(tab) {
   document.getElementById('cover-tab-url').style.color        = isUpload ? 'var(--text-muted)' : 'white';
 }
 
-// ── Groq key persistence ──
+// ── Groq key from memory (API_KEYS loaded from Supabase) ──
 document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('groq_api_key');
-  if (saved) document.getElementById('groq-api-key').value = saved;
+  if (API_KEYS.groq) document.getElementById('groq-api-key').value = API_KEYS.groq;
 });
 document.getElementById('audio-do-transcribe').addEventListener('change', function() {
   document.getElementById('groq-key-wrap').style.display = this.checked ? 'block' : 'none';
@@ -1421,9 +1419,6 @@ async function transcribeWithGroq(file, apiKey) {
   resultBox.style.display = 'block';
   textArea.value = '';
   statsEl.textContent = '⏳ جارٍ التحويل... قد يستغرق دقيقة أو أكثر حسب حجم الملف';
-
-  // Save key
-  localStorage.setItem('groq_api_key', apiKey);
 
   // Groq has 25MB limit — warn if larger
   if (file.size > 25 * 1024 * 1024) {
