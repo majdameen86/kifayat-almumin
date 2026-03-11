@@ -1,205 +1,73 @@
 /* ═══════════════════════════════════════════════════════════════
-   كفاية المؤمن - Service Worker (PWA Support)
+   كفاية المؤمن — sw.js  (Service Worker)
    ═══════════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'kifayat-v1';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/dashboard.html',
-  '/styles.css',
-  '/app.js',
-  '/manifest.json'
-];
+const CACHE_VERSION = 'kifayat-v3';
+const STATIC_ASSETS = ['/', '/index.html', '/styles.css', '/app.js', '/manifest.json'];
 
-// تثبيت Service Worker
-self.addEventListener('install', (event) => {
-  console.log('Service Worker installing...');
-  
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('Caching assets');
-      return cache.addAll(ASSETS_TO_CACHE).catch(err => {
-        console.log('Some assets failed to cache:', err);
-      });
-    })
-  );
-  
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE_VERSION).then(async cache => {
+    for (const url of STATIC_ASSETS) {
+      try { await cache.add(url); } catch(err) { console.warn('SW: skip', url); }
+    }
+  }));
   self.skipWaiting();
 });
 
-// تفعيل Service Worker
-self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating...');
-  
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-  
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.filter(k => k !== CACHE_VERSION).map(k => caches.delete(k)))
+  ));
   self.clients.claim();
 });
 
-// معالجة الطلبات
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+  if (!url.protocol.startsWith('http')) return;
+  if (url.hostname.includes('supabase.co') || url.hostname.includes('groq.com') ||
+      url.hostname.includes('cloudinary.com') || url.hostname.includes('googleapis.com')) return;
+  if (url.pathname.startsWith('/dashboard')) return;
 
-  // تخطي الطلبات غير HTTP/HTTPS
-  if (!url.protocol.startsWith('http')) {
+  if (e.request.method === 'GET' && /\.(css|js|woff2?|png|jpg|jpeg|svg|ico|webp)(\?.*)?$/.test(url.pathname)) {
+    e.respondWith(caches.match(e.request).then(cached => cached ||
+      fetch(e.request).then(res => {
+        if (res.ok) { const c = res.clone(); caches.open(CACHE_VERSION).then(cache => cache.put(e.request, c)); }
+        return res;
+      }).catch(() => caches.match(e.request))
+    ));
     return;
   }
 
-  // استراتيجية Cache First للأصول الثابتة
-  if (request.method === 'GET' && 
-      (request.url.includes('.css') || 
-       request.url.includes('.js') || 
-       request.url.includes('.woff') ||
-       request.url.includes('.png') ||
-       request.url.includes('.jpg'))) {
-    
-    event.respondWith(
-      caches.match(request).then((response) => {
-        return response || fetch(request).then((response) => {
-          // لا نخزن الاستجابات غير الناجحة
-          if (!response || response.status !== 200 || response.type === 'error') {
-            return response;
-          }
-
-          // نسخ الاستجابة
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, responseToCache);
-          });
-
-          return response;
-        }).catch(() => {
-          // إذا فشل الطلب، حاول الحصول على نسخة مخزنة
-          return caches.match(request);
-        });
-      })
-    );
-    return;
-  }
-
-  // استراتيجية Network First للطلبات الديناميكية
-  event.respondWith(
-    fetch(request)
-      .then((response) => {
-        // لا نخزن الاستجابات غير الناجحة
-        if (!response || response.status !== 200) {
-          return response;
-        }
-
-        // نسخ الاستجابة
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(request, responseToCache);
-        });
-
-        return response;
-      })
-      .catch(() => {
-        // إذا فشل الطلب، حاول الحصول على نسخة مخزنة
-        return caches.match(request).then((response) => {
-          return response || new Response('Offline - Content not available', {
-            status: 503,
-            statusText: 'Service Unavailable',
-            headers: new Headers({
-              'Content-Type': 'text/plain'
-            })
-          });
-        });
-      })
-  );
-});
-
-// معالجة الرسائل من العميل
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+  if (e.request.mode === 'navigate') {
+    e.respondWith(fetch(e.request).catch(() =>
+      caches.match('/index.html').then(r => r ||
+        new Response('<h1 style="font-family:sans-serif;text-align:center;padding:60px;direction:rtl">أنت غير متصل بالإنترنت</h1>',
+          { headers: { 'Content-Type': 'text/html; charset=utf-8' } })
+      )
+    ));
   }
 });
 
-// معالجة الإشعارات
-self.addEventListener('push', (event) => {
-  if (!event.data) {
-    console.log('Push event but no data');
-    return;
-  }
-
-  const options = {
-    body: event.data.text(),
-    icon: '/icon-192x192.png',
-    badge: '/badge-72x72.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    }
-  };
-
-  event.waitUntil(
-    self.registration.showNotification('كفاية المؤمن', options)
-  );
+self.addEventListener('push', e => {
+  if (!e.data) return;
+  let p = { title: 'كفاية المؤمن', body: '', url: '/' };
+  try { p = { ...p, ...e.data.json() }; } catch { p.body = e.data.text(); }
+  e.waitUntil(self.registration.showNotification(p.title, {
+    body: p.body, icon: '/icons/icon-192x192.png', badge: '/icons/icon-72x72.png',
+    vibrate: [100,50,100], data: { url: p.url }, dir: 'rtl', lang: 'ar'
+  }));
 });
 
-// معالجة نقرات الإشعارات
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-
-  event.waitUntil(
-    clients.matchAll({ type: 'window' }).then((clientList) => {
-      // ابحث عن نافذة مفتوحة بالفعل
-      for (let i = 0; i < clientList.length; i++) {
-        const client = clientList[i];
-        if (client.url === '/' && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      // إذا لم توجد نافذة، افتح واحدة جديدة
-      if (clients.openWindow) {
-        return clients.openWindow('/');
-      }
-    })
-  );
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = e.notification.data?.url || '/';
+  e.waitUntil(clients.matchAll({ type:'window', includeUncontrolled:true }).then(list => {
+    const w = list.find(c => c.url === url);
+    return w ? w.focus() : clients.openWindow(url);
+  }));
 });
 
-// معالجة إغلاق الإشعارات
-self.addEventListener('notificationclose', (event) => {
-  console.log('Notification closed:', event.notification.tag);
-});
-
-// معالجة المزامنة في الخلفية
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-analytics') {
-    event.waitUntil(syncAnalytics());
-  }
-});
-
-async function syncAnalytics() {
-  try {
-    // هنا يمكن إضافة منطق المزامنة
-    console.log('Syncing analytics...');
-  } catch (error) {
-    console.error('Sync failed:', error);
-    throw error;
-  }
-}
-
-// معالجة الأخطاء
-self.addEventListener('error', (event) => {
-  console.error('Service Worker error:', event.error);
-});
-
-self.addEventListener('unhandledrejection', (event) => {
-  console.error('Unhandled rejection in Service Worker:', event.reason);
+self.addEventListener('message', e => {
+  if (e.data?.type === 'SKIP_WAITING') self.skipWaiting();
+  if (e.data?.type === 'CLEAR_CACHE') caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
 });
