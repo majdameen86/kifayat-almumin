@@ -1086,9 +1086,9 @@ async function doDelete() {
     if (page) loadPageData(page.id.replace('page-',''));
   } catch(e) {
     showToast('خطأ في الحذف: ' + e.message, 'error');
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> نعم، احذف';
+    btn.disabled = false;
   }
-  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> نعم، احذف';
-  btn.disabled = false;
 }
 
 function closeConfirm() {
@@ -1120,7 +1120,7 @@ function closeModal(id) {
 }
 
 document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+  m.addEventListener('click', e => { if (e.target === m && m.id) closeModal(m.id); });
 });
 
 function showToast(msg, type = 'success') {
@@ -1237,6 +1237,7 @@ async function uploadToStorage(bucket, file, folder = '') {
     }
 
     xhr.onload = () => {
+      uploadToStorage._onProgress = null;
       if (xhr.status >= 200 && xhr.status < 300) {
         resolve(`${SUPABASE_URL}/storage/v1/object/public/${bucket}/${filename}`);
       } else {
@@ -1250,7 +1251,7 @@ async function uploadToStorage(bucket, file, folder = '') {
         reject(new Error(msg));
       }
     };
-    xhr.onerror = () => reject(new Error('خطأ في الاتصال بـ Supabase Storage'));
+    xhr.onerror = () => { uploadToStorage._onProgress = null; reject(new Error('خطأ في الاتصال بـ Supabase Storage')); };
     xhr.send(file);
   });
 }
@@ -1855,7 +1856,7 @@ async function saveHadith() {
       showToast(schedDate ? `تمت الجدولة ليوم ${schedDate} ✅` : 'تم إضافة الحديث ✅', 'success');
     }
     closeModal('modal-hadith');
-    loadHadiths();
+    await loadHadiths();
   } catch(e) {
     showToast('خطأ: ' + e.message, 'error');
   }

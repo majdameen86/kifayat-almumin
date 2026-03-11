@@ -285,7 +285,7 @@ async function runSearch(q) {
 
     results.innerHTML = items.map(r => {
       const icon = r.type === 'audio' ? '🎙' : '📖';
-      const action = r.type === 'audio' ? "openAudioDetail('" + r.id + "')" : "showPage('books')";
+      const action = r.type === 'audio' ? "openAudioDetail('" + escHtml(String(r.id)) + "')" : "showPage('books')";
       return '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor=\'var(--em)\'" onmouseout="this.style.borderColor=\'var(--border)\'" onclick="' + action + '">'
         + '<div style="width:42px;height:42px;border-radius:10px;background:rgba(11,107,66,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">' + icon + '</div>'
         + '<div><div style="font-size:15px;font-weight:700;margin-bottom:3px">' + escHtml(r.title) + '</div>'
@@ -504,17 +504,17 @@ function renderPrayers(times){
   `).join('');
 
   // Start countdown
-  startCountdown(prayers[nextIdx].name, minsArr[nextIdx], nowMins, nextIdx===0 && nowMins > minsArr[0]);
+  startCountdown(prayers[nextIdx].name, minsArr[nextIdx]);
 }
 
-function startCountdown(name, targetMins, nowMins, isTomorrow){
+function startCountdown(name, targetMins){
   if(prayerCountdownInterval) clearInterval(prayerCountdownInterval);
 
   function update(){
     const now = new Date();
     const curMins = now.getHours()*60+now.getMinutes();
     let diff = targetMins - curMins;
-    if(isTomorrow || diff < 0) diff += 1440;
+    if(diff < 0) diff += 1440;
     const h = Math.floor(diff/60);
     const m = diff % 60;
     const txt = h>0 ? `${h} ساعة و ${m} دقيقة` : `${m} دقيقة`;
@@ -584,11 +584,11 @@ function closePrayerModal(){
 function renderCitiesGrid(list){
   const grid = document.getElementById('cities-grid');
   grid.innerHTML = list.map(city=>`
-    <button class="city-btn${city.name===currentCity.name?' selected':''}" onclick="selectCity('${city.name}')">
+    <button class="city-btn${city.name===currentCity.name?' selected':''}" onclick="selectCity('${city.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">
       <span class="city-flag">${city.flag}</span>
       <div style="text-align:right">
-        <div style="font-size:13px;font-weight:700">${city.name}</div>
-        <div style="font-size:11px;opacity:.6">${city.country}</div>
+        <div style="font-size:13px;font-weight:700">${escHtml(city.name)}</div>
+        <div style="font-size:11px;opacity:.6">${escHtml(city.country)}</div>
       </div>
     </button>
   `).join('');
@@ -725,7 +725,7 @@ async function loadAudios() {
             </div>
           </div>
           <div class="audio-body">
-            <h3>${a.title}</h3>
+            <h3>${escHtml(a.title)}</h3>
             <div class="audio-meta">
               <span>👤 ${a.sheikhs?.name || 'غير محدد'}</span>
               <span>🎧 ${a.play_count || 0}</span>
@@ -781,19 +781,19 @@ async function loadBooks() {
                 ? `<img src="${b.cover_url}" style="width:100%;height:100%;object-fit:cover">`
                 : `<div class="book-cover-inner">
                     <div class="book-icon">${icons[i % icons.length]}</div>
-                    <div class="book-cover-title">${b.title}</div>
-                    <div class="book-cover-author">${b.author || ''}</div>
+                    <div class="book-cover-title">${escHtml(b.title)}</div>
+                    <div class="book-cover-author">${escHtml(b.author || '')}</div>
                   </div>`
               }
             </div>
           </div>
           <div class="book-info">
-            <h4>${b.title}</h4>
-            <span>${b.author || ''}</span>
+            <h4>${escHtml(b.title)}</h4>
+            <span>${escHtml(b.author || '')}</span>
             <div class="book-stars">${'★'.repeat(Math.round(b.rating||5))}${'☆'.repeat(5-Math.round(b.rating||5))}</div>
             <div class="book-actions">
-              ${b.pdf_url ? `<button class="book-btn book-btn-read" onclick="window.open('${b.pdf_url}','_blank')">📖 قراءة</button>` : ''}
-              ${b.pdf_url ? `<button class="book-btn book-btn-dl" onclick="downloadBook('${b.id}','${b.pdf_url}')">⬇</button>` : ''}
+              ${b.pdf_url ? `<button class="book-btn book-btn-read" onclick="window.open('${escHtml(b.pdf_url)}','_blank')">📖 قراءة</button>` : ''}
+              ${b.pdf_url ? `<button class="book-btn book-btn-dl" onclick="downloadBook('${escHtml(String(b.id))}','${escHtml(b.pdf_url)}')">⬇</button>` : ''}
             </div>
           </div>
         </div>
@@ -819,12 +819,12 @@ async function loadSheikhs() {
         <div class="sheikh-card">
           <div class="sheikh-avatar">
             ${s.image_url
-              ? `<img src="${s.image_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
-              : s.name.charAt(2)
+              ? `<img src="${escHtml(s.image_url)}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
+              : escHtml(s.name.charAt(0))
             }
           </div>
-          <h3>${s.name}</h3>
-          <span>${s.bio ? s.bio.substring(0,40)+'...' : ''}</span>
+          <h3>${escHtml(s.name)}</h3>
+          <span>${s.bio ? escHtml(s.bio.substring(0,40))+'...' : ''}</span>
         </div>
       `).join('');
     });
@@ -836,13 +836,13 @@ async function loadSheikhs() {
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;display:flex;gap:20px;align-items:center;cursor:pointer;transition:all .2s">
           <div class="sheikh-avatar" style="width:80px;height:80px;font-size:32px;flex-shrink:0">
             ${s.image_url
-              ? `<img src="${s.image_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
-              : s.name.charAt(2)
+              ? `<img src="${escHtml(s.image_url)}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
+              : escHtml(s.name.charAt(0))
             }
           </div>
           <div>
-            <h3 style="font-size:18px;font-weight:700;margin-bottom:6px">${s.name}</h3>
-            <p style="font-size:13px;color:var(--text3);line-height:1.7">${s.bio || ''}</p>
+            <h3 style="font-size:18px;font-weight:700;margin-bottom:6px">${escHtml(s.name)}</h3>
+            <p style="font-size:13px;color:var(--text3);line-height:1.7">${escHtml(s.bio || '')}</p>
           </div>
         </div>
       `).join('');
@@ -951,8 +951,7 @@ async function downloadBook(id, url) {
     setTimeout(() => { URL.revokeObjectURL(blobUrl); a.remove(); }, 3000);
     showToast('بدأ تحميل الكتاب ⬇', 'success');
     await dbInsert('analytics', { event: 'download', item_id: id, item_type: 'book' });
-    showToast('جارٍ فتح الكتاب 📖', 'success');
-  } catch(e) { showToast('جارٍ فتح الكتاب 📖', 'success'); }
+  } catch(e) { showToast('حدث خطأ أثناء التحميل', 'error'); }
 }
 
 // ══ OPEN AUDIO DETAIL ══
