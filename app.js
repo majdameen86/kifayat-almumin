@@ -641,6 +641,7 @@ async function dbQuery(table, options = {}) {
       'Content-Type': 'application/json'
     }
   });
+  if (!res.ok) { const err = await res.text(); throw new Error(`DB ${res.status}: ${err}`); }
   return res.json();
 }
 
@@ -1136,13 +1137,12 @@ async function loadHadithOfDay() {
       select: 'text,source,type',
       filter: `schedule_date=eq.${today}`,
       limit: 1
-    });
+    }).catch(() => null);
 
     // If scheduled found, activate it
     if (data && data.length) {
       const h = data[0];
       renderHadith(h.text, h.source);
-      // Auto-activate it
       await dbUpdate('hadiths', `schedule_date=eq.${today}`, { is_active: true, schedule_date: null }).catch(() => {});
       return;
     }

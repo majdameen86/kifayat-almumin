@@ -24,8 +24,10 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (!url.protocol.startsWith('http')) return;
-  if (url.hostname.includes('supabase.co') || url.hostname.includes('groq.com') ||
-      url.hostname.includes('cloudinary.com') || url.hostname.includes('googleapis.com')) return;
+
+  // Skip all cross-origin requests — let the browser handle them directly
+  if (url.origin !== self.location.origin) return;
+
   if (url.pathname.startsWith('/dashboard')) return;
 
   if (e.request.method === 'GET' && /\.(css|js|woff2?|png|jpg|jpeg|svg|ico|webp)(\?.*)?$/.test(url.pathname)) {
@@ -33,7 +35,9 @@ self.addEventListener('fetch', e => {
       fetch(e.request).then(res => {
         if (res.ok) { const c = res.clone(); caches.open(CACHE_VERSION).then(cache => cache.put(e.request, c)); }
         return res;
-      }).catch(() => caches.match(e.request))
+      }).catch(() => caches.match(e.request).then(r => r ||
+        new Response('', { status: 503, statusText: 'Service Unavailable' })
+      ))
     ));
     return;
   }
