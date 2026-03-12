@@ -206,7 +206,13 @@
     <div class="page-content" id="page-books">
       <div class="section-header">
         <div><h2>مكتبة الكتب</h2><p>إدارة الكتب والمراجع الإسلامية</p></div>
-        <button class="btn btn-primary" onclick="openModal('modal-book')"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> إضافة كتاب</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline" onclick="openBulkBooksModal()" title="رفع عدة كتب دفعة واحدة">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-2 8h-3v3h-2v-3H10v-2h3V9h2v3h3v2z"/></svg>
+            رفع متعدد
+          </button>
+          <button class="btn btn-primary" onclick="openModal('modal-book')"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> إضافة كتاب</button>
+        </div>
       </div>
       <div class="book-grid" id="books-grid">
         <div class="empty-state" style="grid-column:1/-1"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="animation:spin .8s linear infinite"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg><p>جارٍ التحميل...</p></div>
@@ -926,6 +932,60 @@
       <button class="btn btn-primary" id="bulk-upload-btn" onclick="startBulkUpload()" disabled>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
         رفع الكل
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BULK BOOKS UPLOAD MODAL ══ -->
+<div class="modal-overlay" id="modal-bulk-books">
+  <div class="modal" style="max-width:560px;width:95%">
+    <div class="modal-header">
+      <h3><svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold);margin-left:8px"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> رفع كتب متعددة</h3>
+      <button class="modal-close" onclick="closeModal('modal-bulk-books')"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div>
+          <label style="display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px">المؤلف</label>
+          <input type="text" id="bulk-book-author" placeholder="اسم المؤلف" style="width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;box-sizing:border-box">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px">التصنيف</label>
+          <select id="bulk-book-category" style="width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></select>
+        </div>
+      </div>
+
+      <div id="bulk-book-drop-zone" style="border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px"
+           onclick="document.getElementById('bulk-books-input').click()"
+           ondragover="event.preventDefault();this.style.borderColor='var(--emerald-glow)'"
+           ondragleave="this.style.borderColor='var(--border)'"
+           ondrop="event.preventDefault();this.style.borderColor='var(--border)';handleBulkBooks(event.dataTransfer.files)">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-muted);margin-bottom:8px"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+        <p style="color:var(--text-muted);margin:0;font-size:13px">اسحب ملفات PDF هنا أو اضغط للاختيار</p>
+      </div>
+      <input type="file" id="bulk-books-input" accept=".pdf,application/pdf" multiple style="display:none" onchange="handleBulkBooks(this.files)">
+
+      <div id="bulk-books-list" style="max-height:220px;overflow-y:auto;margin-bottom:16px"></div>
+
+      <div id="bulk-books-progress" style="display:none;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:6px">
+          <span id="bulk-books-label">جارٍ الرفع...</span>
+          <span id="bulk-books-pct">0%</span>
+        </div>
+        <div style="height:6px;background:var(--surface2);border-radius:4px;overflow:hidden">
+          <div id="bulk-books-bar" style="height:100%;width:0%;background:var(--gold);transition:width .3s"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);margin-left:auto">
+        <input type="checkbox" id="bulk-books-published" checked> نشر فور الرفع
+      </label>
+      <button class="btn btn-outline" onclick="closeModal('modal-bulk-books')">إلغاء</button>
+      <button class="btn btn-gold" id="bulk-books-btn" onclick="startBulkBooks()" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+        رفع الكتب
       </button>
     </div>
   </div>
