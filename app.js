@@ -619,6 +619,10 @@ document.getElementById('prayer-modal').addEventListener('click', function(e){
    SUPABASE INTEGRATION
 ══════════════════════════════════════════════════════════════ */
 
+// ══ AI STATE ══
+let currentTranscript = '';
+let groqApiKey = '';
+
 // ══ SUPABASE CONFIG ══
 const SUPABASE_URL = 'https://qfmsplotijbnwderzbkv.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmbXNwbG90aWpibndkZXJ6Ymt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNjQwMzQsImV4cCI6MjA4ODY0MDAzNH0.FgDbDDU7ELt5wd6VihhTECTusHtA7vagr4widsp3XyA';
@@ -803,6 +807,9 @@ async function loadSettings() {
     if (s.primary_color) {
       document.documentElement.style.setProperty('--em', s.primary_color);
     }
+
+    // Groq API key for AI features
+    if (s.api_groq) groqApiKey = s.api_groq;
   } catch(e) { console.log('Settings load error:', e); }
 }
 
@@ -983,6 +990,77 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+
+// ════════════════════════════════════════
+//  AI TOOLS — تلخيص / أسئلة / مقال
+// ════════════════════════════════════════
+async function showAIResult(type) {
+  const resultBox   = document.getElementById('ai-result');
+  const titleEl     = document.getElementById('ai-result-title');
+  const contentEl   = document.getElementById('ai-result-content');
+
+  if (!resultBox || !titleEl || !contentEl) return;
+
+  // إخفاء النتيجة السابقة وإظهار حالة التحميل
+  resultBox.classList.remove('visible');
+
+  if (!currentTranscript) {
+    showToast('لا يوجد نص للدرس للمعالجة', 'error');
+    return;
+  }
+  if (!groqApiKey) {
+    showToast('مفتاح Groq غير مُضبوط في الإعدادات', 'error');
+    return;
+  }
+
+  const config = {
+    summary:   { title: 'ملخص الدرس',      icon: '⊟', prompt: `قم بتلخيص الدرس الآتي تلخيصاً وافياً ومرتباً بنقاط واضحة باللغة العربية الفصحى:\n\n${currentTranscript}` },
+    questions: { title: 'أسئلة مراجعة',    icon: '❓', prompt: `استخرج من الدرس الآتي 10 أسئلة مراجعة متنوعة تغطي أهم النقاط، واذكر الإجابة المختصرة بعد كل سؤال، باللغة العربية الفصحى:\n\n${currentTranscript}` },
+    article:   { title: 'مقالة من الدرس',  icon: '📰', prompt: `حوّل الدرس الآتي إلى مقالة علمية منقحة بأسلوب أدبي رصين، مع مقدمة وخاتمة، باللغة العربية الفصحى:\n\n${currentTranscript}` }
+  };
+
+  const { title, icon, prompt } = config[type] || config.summary;
+  titleEl.textContent = title;
+  contentEl.innerHTML = '<span style="color:var(--text3)">⏳ جارٍ المعالجة...</span>';
+  resultBox.classList.add('visible');
+  resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${groqApiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 2048
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const text = data?.choices?.[0]?.message?.content || '';
+
+    if (!text) throw new Error('لم يُرجع النموذج نتيجة');
+
+    // تحويل النص إلى HTML بسيط (سطر جديد → <br>، **bold** → <strong>)
+    const html = escHtml(text)
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+
+    contentEl.innerHTML = `<p style="line-height:1.9;font-size:14px">${html}</p>`;
+  } catch(e) {
+    contentEl.innerHTML = `<span style="color:#e53e3e">❌ خطأ: ${escHtml(e.message)}</span>`;
+    console.warn('AI error:', e);
+  }
+}
 
 // ════════════════════════════════════════
 //  CONTACT MODAL
