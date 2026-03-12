@@ -1905,14 +1905,9 @@ async function openBulkModal() {
   document.getElementById('bulk-files-list').innerHTML = '';
   document.getElementById('bulk-upload-btn').disabled = true;
   document.getElementById('bulk-total-progress').style.display = 'none';
-  openModal('modal-bulk-upload');
+  // فتح المودال مباشرة بدون استدعاء openModal تجنباً للتكرار اللانهائي
+  document.getElementById('modal-bulk-upload').classList.add('open');
 }
-// Override openModal call for bulk
-const _origOpenModal = window.openModal;
-window.openModal = function(id) {
-  if (id === 'modal-bulk-upload') { openBulkModal(); return; }
-  _origOpenModal(id);
-};
 
 function handleBulkDrop(e) {
   const files = e.dataTransfer.files;
@@ -2012,4 +2007,87 @@ async function startBulkUpload() {
   btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg> رفع الكل';
   btn.disabled = false;
   if (done > 0) { loadAudios(); }
+}
+
+// ════════════════════════════════════════
+//  BULK BOOKS UPLOAD — رفع كتب متعددة
+// ════════════════════════════════════════
+let _bulkBooks = [];
+
+async function openBulkBooksModal() {
+  try {
+    const cats = await dbGet('categories', 'select=id,name&order=name');
+    const catSel = document.getElementById('bulk-book-category');
+    catSel.innerHTML = '<option value="">— بدون تصنيف —</option>' +
+      cats.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  } catch(e) {}
+  _bulkBooks = [];
+  document.getElementById('bulk-books-list').innerHTML = '';
+  document.getElementById('bulk-books-btn').disabled = true;
+  document.getElementById('bulk-books-progress').style.display = 'none';
+  document.getElementById('modal-bulk-books').classList.add('open');
+}
+
+function handleBulkBooks(files) {
+  _bulkBooks = Array.from(files).filter(f => f.type === 'application/pdf' || /\.pdf$/i.test(f.name));
+  if (!_bulkBooks.length) { showToast('لم يتم العثور على ملفات PDF', 'error'); return; }
+  const listEl = document.getElementById('bulk-books-list');
+  listEl.innerHTML = _bulkBooks.map((f, i) => `
+    <div id="bulk-book-item-${i}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:8px;margin-bottom:6px;font-size:13px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold);flex-shrink:0"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(f.name)}</span>
+      <span style="color:var(--text-muted);flex-shrink:0">${(f.size/1024/1024).toFixed(1)} MB</span>
+      <span id="bulk-book-status-${i}" style="font-size:12px;color:var(--text-muted);flex-shrink:0">جاهز</span>
+    </div>`).join('');
+  document.getElementById('bulk-books-btn').disabled = false;
+}
+
+async function startBulkBooks() {
+  if (!_bulkBooks.length) return;
+  const btn = document.getElementById('bulk-books-btn');
+  btn.disabled = true;
+  btn.textContent = 'جارٍ الرفع...';
+  const author     = document.getElementById('bulk-book-author').value.trim();
+  const categoryId = document.getElementById('bulk-book-category').value || null;
+  const published  = document.getElementById('bulk-books-published').checked;
+  const progressWrap = document.getElementById('bulk-books-progress');
+  const progressBar  = document.getElementById('bulk-books-bar');
+  const progressPct  = document.getElementById('bulk-books-pct');
+  const progressLbl  = document.getElementById('bulk-books-label');
+  progressWrap.style.display = 'block';
+  let done = 0, failed = 0;
+  for (let i = 0; i < _bulkBooks.length; i++) {
+    const f = _bulkBooks[i];
+    const statusEl = document.getElementById('bulk-book-status-' + i);
+    progressLbl.textContent = `الملف ${i+1} من ${_bulkBooks.length}: ${f.name}`;
+    statusEl.textContent = 'جارٍ الرفع...';
+    statusEl.style.color = 'var(--text-muted)';
+    try {
+      const title = f.name.replace(/\.pdf$/i, '').replace(/[-_]/g, ' ');
+      const folder = 'books-' + Date.now();
+      const pdfUrl = await uploadToStorage('books', f, folder);
+      await dbInsert('books', {
+        title, author: author || title,
+        category_id: categoryId ? parseInt(categoryId) : null,
+        pdf_url: pdfUrl,
+        published,
+        rating: 5
+      });
+      done++;
+      statusEl.textContent = '✓';
+      statusEl.style.color = 'var(--emerald-glow)';
+    } catch(e) {
+      failed++;
+      statusEl.textContent = '✗';
+      statusEl.style.color = '#ef4444';
+    }
+    const overall = Math.round(((i + 1) / _bulkBooks.length) * 100);
+    progressBar.style.width = overall + '%';
+    progressPct.textContent = overall + '%';
+  }
+  progressLbl.textContent = `اكتمل: ${done} نجح، ${failed} فشل`;
+  showToast(`تم رفع ${done} كتاب بنجاح${failed ? ' ('+failed+' فشل)' : ''}`, done > 0 ? 'success' : 'error');
+  btn.textContent = 'رفع الكتب';
+  btn.disabled = false;
+  if (done > 0) { loadBooks(); }
 }
