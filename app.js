@@ -48,6 +48,70 @@ window.addEventListener('scroll', () => {
 // ══ REAL HTML5 AUDIO PLAYER ══
 const audio = document.getElementById('real-audio');
 let currentAudioUrl = '';
+let currentAudioId  = null;  // معرف الدرس الحالي
+
+// ══ RESUME: حفظ/استرجاع موضع التشغيل ══
+function saveAudioPosition() {
+  if (!currentAudioId || !audio.duration || audio.ended) return;
+  const pct = audio.currentTime / audio.duration;
+  if (pct < 0.02 || pct > 0.97) return; // لا نحفظ في البداية أو النهاية تقريباً
+  try {
+    localStorage.setItem('kifayat_pos_' + currentAudioId, JSON.stringify({
+      time: Math.floor(audio.currentTime),
+      duration: Math.floor(audio.duration),
+      updated: Date.now()
+    }));
+  } catch(e) {}
+}
+function getSavedPosition(id) {
+  try {
+    const d = JSON.parse(localStorage.getItem('kifayat_pos_' + id) || 'null');
+    if (!d) return 0;
+    if (Date.now() - d.updated > 30 * 24 * 3600 * 1000) { localStorage.removeItem('kifayat_pos_' + id); return 0; }
+    return d.time || 0;
+  } catch { return 0; }
+}
+function clearSavedPosition(id) {
+  try { localStorage.removeItem('kifayat_pos_' + (id || currentAudioId)); } catch {}
+}
+
+// ══ PLAYLIST: قائمة التشغيل ══
+let playlist      = [];
+let playlistIndex = -1;
+
+function setPlaylist(items, startIndex = 0) {
+  playlist      = items; // [{id, title, sheikh}]
+  playlistIndex = startIndex;
+  updatePlaylistBtns();
+}
+
+function updatePlaylistBtns() {
+  const prevBtn = document.getElementById('player-prev-btn');
+  const nextBtn = document.getElementById('player-next-btn');
+  if (prevBtn) prevBtn.style.display = playlist.length > 1 ? '' : 'none';
+  if (nextBtn) nextBtn.style.display = playlist.length > 1 ? '' : 'none';
+  if (prevBtn) prevBtn.disabled = playlistIndex <= 0;
+  if (nextBtn) nextBtn.disabled = playlistIndex >= playlist.length - 1;
+  const counterEl = document.getElementById('player-playlist-counter');
+  if (counterEl) counterEl.textContent = playlist.length > 1 ? `${playlistIndex+1}/${playlist.length}` : '';
+}
+
+async function playNext() {
+  if (playlistIndex < playlist.length - 1) {
+    playlistIndex++;
+    updatePlaylistBtns();
+    const item = playlist[playlistIndex];
+    await playAudio(item.id, item.title, item.sheikh);
+  }
+}
+async function playPrev() {
+  if (playlistIndex > 0) {
+    playlistIndex--;
+    updatePlaylistBtns();
+    const item = playlist[playlistIndex];
+    await playAudio(item.id, item.title, item.sheikh);
+  }
+}
 
 function showPlayer(url, title, sheikh, thumbEmoji) {
   const fp = document.getElementById('floating-player');
@@ -62,6 +126,7 @@ function showPlayer(url, title, sheikh, thumbEmoji) {
   document.getElementById('player-thumb-el').textContent  = thumbEmoji || '🎙';
   document.getElementById('player-play-btn').textContent  = '⏸';
   isPlaying = true;
+  updatePlaylistBtns();
 }
 
 // ═══ AUDIO ENGINE ═══
@@ -118,11 +183,15 @@ function toggleMute() {
 }
 
 function closePlayer() {
+  saveAudioPosition();
   audio.pause();
   currentAudioUrl = '';
+  currentAudioId  = null;
   isPlaying = false;
+  playlist = []; playlistIndex = -1;
   document.getElementById('floating-player').classList.remove('visible');
   document.getElementById('player-play-btn').textContent = '▶';
+  updatePlaylistBtns();
 }
 
 function fmtTime(s) {
@@ -133,6 +202,7 @@ function fmtTime(s) {
 }
 
 // Audio event listeners
+let _lastSaveTime = 0;
 audio.addEventListener('timeupdate', () => {
   if (!audio.duration) return;
   const pct = (audio.currentTime / audio.duration) * 100;
@@ -140,8 +210,10 @@ audio.addEventListener('timeupdate', () => {
   if (fill) fill.style.width = pct + '%';
   const cur = document.getElementById('player-cur');
   if (cur) cur.textContent = fmtTime(audio.currentTime);
-  // Sync transcript highlight
   syncTranscript();
+  // حفظ الموضع كل 5 ثوانٍ
+  const now = Date.now();
+  if (now - _lastSaveTime > 5000) { _lastSaveTime = now; saveAudioPosition(); }
 });
 audio.addEventListener('loadedmetadata', () => {
   const total = document.getElementById('player-total');
@@ -152,6 +224,11 @@ audio.addEventListener('ended', () => {
   isPlaying = false;
   const fill = document.getElementById('progress-fill');
   if (fill) fill.style.width = '0%';
+  clearSavedPosition();
+  // تشغيل الدرس التالي في قائمة التشغيل
+  if (playlist.length > 1 && playlistIndex < playlist.length - 1) {
+    setTimeout(() => playNext(), 800);
+  }
 });
 audio.addEventListener('error', () => showToast('تعذّر تحميل الملف الصوتي', 'error'));
 
@@ -641,6 +718,7 @@ async function dbQuery(table, options = {}) {
       'Content-Type': 'application/json'
     }
   });
+  if (!res.ok) { const err = await res.text(); throw new Error(`DB ${res.status}: ${err}`); }
   return res.json();
 }
 
@@ -684,45 +762,103 @@ async function loadAudios() {
     if (!data || data.length === 0) return;
 
     const grids = document.querySelectorAll('.audios-grid');
-    grids.forEach(grid => {
-      grid.innerHTML = data.map(a => `
-        <div class="audio-card" onclick="openAudioDetail('${a.id}')">
-          <div class="audio-thumb" style="background:linear-gradient(135deg,var(--em-dark),#0a2e1c)">
-            ${a.thumbnail_url
-              ? `<img src="${a.thumbnail_url}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">`
-              : '<div class="audio-thumb-inner">🎙</div>'
-            }
-            <div class="audio-thumb-overlay"></div>
-            <div class="audio-play-btn"><span class="ic">▶</span></div>
-            <div class="audio-duration">${a.duration || '--:--'}</div>
-            <div class="audio-cat">
-              <span class="badge badge-green">${a.categories?.name || 'درس'}</span>
-            </div>
-          </div>
-          <div class="audio-body">
-            <h3>${escHtml(a.title)}</h3>
-            <div class="audio-meta">
-              <span>👤 ${a.sheikhs?.name || 'غير محدد'}</span>
-              <span>🎧 ${a.play_count || 0}</span>
-            </div>
-          </div>
-          <div class="audio-footer">
-            <button class="btn-play-small" onclick="event.stopPropagation();playAudio('${a.id}','${escHtml(a.title)}','${escHtml(a.sheikhs?.name||'')}')" title="استمع مباشرة">
-              <span class="ic">▶</span> استمع
-            </button>
-            <button class="btn-download" onclick="event.stopPropagation();downloadAudio('${a.id}')" title="تحميل">
-              <span class="ic">⬇</span>
-            </button>
-          </div>
-        </div>
-      `).join('');
-    });
+    grids.forEach(grid => renderAudioCards(grid, data));
 
     // Update stats
     const statEl = document.querySelector('.hero-stat:first-child strong');
     if (statEl) statEl.textContent = data.length + '+';
 
   } catch(e) { console.log('Audios load error:', e); }
+}
+
+// ══ ADVANCED AUDIO FILTERS ══
+let _audioFilterData = []; // كل الدروس لعمل الفلترة المحلية
+
+async function initAudioFilters() {
+  // تحميل الشيوخ والتصنيفات لقوائم الفلتر
+  try {
+    const [sheikhs, cats] = await Promise.all([
+      dbQuery('sheikhs', { select: 'id,name', limit: 50 }),
+      dbQuery('categories', { select: 'id,name', limit: 50 })
+    ]);
+
+    const sheikhSel = document.getElementById('filter-sheikh');
+    if (sheikhSel && sheikhs) {
+      sheikhs.forEach(s => {
+        const o = document.createElement('option');
+        o.value = s.id; o.textContent = s.name;
+        sheikhSel.appendChild(o);
+      });
+    }
+    const catSel = document.getElementById('filter-category');
+    if (catSel && cats) {
+      cats.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c.id; o.textContent = c.name;
+        catSel.appendChild(o);
+      });
+    }
+  } catch(e) {}
+
+  // تحميل كل الدروس للفلترة المحلية
+  try {
+    _audioFilterData = await dbQuery('audios', {
+      select: 'id,title,duration,thumbnail_url,play_count,sheikh_id,category_id,sheikhs(name),categories(name)',
+      filter: 'is_published=eq.true',
+      order: 'created_at.desc',
+      limit: 200
+    }) || [];
+    // تعبئة الشبكة الأولى في صفحة الدروس
+    applyAudioFilters();
+  } catch(e) {}
+}
+
+function resetAudioFilters() {
+  const defaults = { 'filter-search':'', 'filter-sheikh':'', 'filter-category':'', 'filter-duration':'', 'filter-sort':'newest' };
+  Object.entries(defaults).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  applyAudioFilters();
+}
+
+function applyAudioFilters() {
+  const q        = (document.getElementById('filter-search')?.value || '').trim().toLowerCase();
+  const sheikhId = document.getElementById('filter-sheikh')?.value || '';
+  const catId    = document.getElementById('filter-category')?.value || '';
+  const durRange = document.getElementById('filter-duration')?.value || '';
+  const sortBy   = document.getElementById('filter-sort')?.value || 'newest';
+
+  let data = [..._audioFilterData];
+
+  // بحث نصي
+  if (q) data = data.filter(a => (a.title || '').toLowerCase().includes(q) || (a.sheikhs?.name || '').toLowerCase().includes(q));
+  // فلتر الشيخ
+  if (sheikhId) data = data.filter(a => String(a.sheikh_id) === String(sheikhId));
+  // فلتر التصنيف
+  if (catId)    data = data.filter(a => String(a.category_id) === String(catId));
+  // فلتر المدة
+  if (durRange) {
+    data = data.filter(a => {
+      if (!a.duration) return true;
+      const parts = String(a.duration).split(':').map(Number);
+      const mins = parts.length === 3 ? parts[0]*60+parts[1] : parts[0];
+      if (durRange === 'short')  return mins < 30;
+      if (durRange === 'medium') return mins >= 30 && mins < 60;
+      if (durRange === 'long')   return mins >= 60;
+      return true;
+    });
+  }
+  // ترتيب
+  if (sortBy === 'popular') data.sort((a,b) => (b.play_count||0) - (a.play_count||0));
+  // newest is default (already sorted from API)
+
+  const grids = document.querySelectorAll('#page-audios .audios-grid');
+  if (!data.length) {
+    grids.forEach(g => { g.innerHTML = '<p style="color:var(--text3);padding:40px;text-align:center;grid-column:1/-1">لا توجد نتائج</p>'; });
+    return;
+  }
+  grids.forEach(g => renderAudioCards(g, data, true));
 }
 
 // ══ LOAD BOOKS ══
@@ -824,7 +960,17 @@ async function playAudio(id, title, sheikh) {
     });
     if (!data || !data[0]?.audio_url) { showToast('الملف غير متاح', 'error'); return; }
     const a = data[0];
+    currentAudioId = id;
+    const savedPos = getSavedPosition(id);
     showPlayer(a.audio_url, title || a.title, sheikh || a.sheikhs?.name, '🎙');
+    // استئناف من موضع التوقف
+    if (savedPos > 5) {
+      audio.addEventListener('loadedmetadata', function _seek() {
+        audio.removeEventListener('loadedmetadata', _seek);
+        audio.currentTime = savedPos;
+        showToast('استئناف من ' + fmtTime(savedPos), 'success');
+      }, { once: true });
+    }
     // Increment play count
     const cur = await dbQuery('audios', { select: 'play_count', filter: `id=eq.${id}`, limit: 1 });
     const newCount = (cur[0]?.play_count || 0) + 1;
@@ -966,7 +1112,6 @@ async function trackVisit() {
 
 // ══ INIT ALL ══
 async function initSupabase() {
-  // Load everything in parallel
   await Promise.allSettled([
     loadSettings(),
     loadHadithOfDay(),
@@ -974,6 +1119,7 @@ async function initSupabase() {
     loadBooks(),
     loadSheikhs(),
     trackVisit(),
+    initAudioFilters(),
   ]);
   console.log('✅ Supabase loaded successfully');
 }
@@ -1136,13 +1282,12 @@ async function loadHadithOfDay() {
       select: 'text,source,type',
       filter: `schedule_date=eq.${today}`,
       limit: 1
-    });
+    }).catch(() => null);
 
     // If scheduled found, activate it
     if (data && data.length) {
       const h = data[0];
       renderHadith(h.text, h.source);
-      // Auto-activate it
       await dbUpdate('hadiths', `schedule_date=eq.${today}`, { is_active: true, schedule_date: null }).catch(() => {});
       return;
     }
@@ -1214,15 +1359,26 @@ async function filterByShikhId(id, name) {
     });
     const grids = document.querySelectorAll('.audios-grid');
     if (data && data.length) {
-      grids.forEach(grid => renderAudioCards(grid, data));
+      grids.forEach(grid => renderAudioCards(grid, data, true));
     } else {
       grids.forEach(grid => { grid.innerHTML = '<p style="color:var(--text3);padding:40px;text-align:center">لا توجد دروس منشورة لهذا الشيخ</p>'; });
     }
   } catch(e) {}
 }
 
-function renderAudioCards(grid, data) {
-  grid.innerHTML = data.map(a => `
+function renderAudioCards(grid, data, showPlayAllBtn = false) {
+  // زر "تشغيل الكل" قبل البطاقات
+  const playAllHtml = showPlayAllBtn && data.length > 1 ? `
+    <div style="grid-column:1/-1;margin-bottom:4px">
+      <button class="btn btn-primary" style="gap:8px" onclick="playAllAudios()">
+        <span class="ic">▶▶</span> تشغيل الكل (${data.length} دروس)
+      </button>
+    </div>` : '';
+
+  grid.innerHTML = playAllHtml + data.map(a => {
+    const savedPos = getSavedPosition(a.id);
+    const resumeHint = savedPos > 5 ? `<span style="font-size:10px;color:var(--em2);margin-right:4px" title="استئناف من ${fmtTime(savedPos)}">↩ ${fmtTime(savedPos)}</span>` : '';
+    return `
     <div class="audio-card" onclick="openAudioDetail('${a.id}')">
       <div class="audio-thumb">
         ${a.thumbnail_url ? `<img src="${a.thumbnail_url}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : '<div class="audio-thumb-inner">🎙</div>'}
@@ -1236,18 +1392,39 @@ function renderAudioCards(grid, data) {
         <div class="audio-meta">
           <span>👤 ${escHtml(a.sheikhs?.name || '—')}</span>
           <span>🎧 ${a.play_count || 0}</span>
+          ${resumeHint}
         </div>
       </div>
       <div class="audio-footer">
-        <button class="btn-play-small" onclick="event.stopPropagation();playAudio('${a.id}','${escHtml(a.title)}','${escHtml(a.sheikhs?.name||'')}')">
+        <button class="btn-play-small" onclick="event.stopPropagation();playAudioWithList('${a.id}')">
           <span class="ic">▶</span> استمع
         </button>
         <button class="btn-download" onclick="event.stopPropagation();downloadAudio('${a.id}')" title="تحميل">
           <span class="ic">⬇</span>
         </button>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
+
+  // حفظ قائمة التشغيل الحالية
+  window._currentAudioList = data.map(a => ({ id: a.id, title: a.title, sheikh: a.sheikhs?.name || '' }));
+}
+
+// تشغيل درس محدد مع تفعيل قائمة التشغيل
+async function playAudioWithList(id) {
+  const list = window._currentAudioList || [];
+  const idx  = list.findIndex(a => String(a.id) === String(id));
+  if (list.length > 1 && idx > -1) setPlaylist(list, idx);
+  await playAudio(id, '', '');
+}
+
+// تشغيل كل الدروس المعروضة
+async function playAllAudios() {
+  const list = window._currentAudioList || [];
+  if (!list.length) return;
+  setPlaylist(list, 0);
+  await playAudio(list[0].id, list[0].title, list[0].sheikh);
+  showToast(`قائمة تشغيل: ${list.length} دروس`, 'success');
 }
 
 // ════════════════════════════════════════

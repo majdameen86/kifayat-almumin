@@ -1881,3 +1881,135 @@ async function editSheikhEnhanced(id) {
     openModal('modal-sheikh');
   } catch(e) { showToast('خطأ في التحميل', 'error'); }
 }
+
+// ════════════════════════════════════════
+//  BULK UPLOAD — رفع متعدد
+// ════════════════════════════════════════
+let _bulkFiles = [];
+
+async function openBulkModal() {
+  // ملء قوائم الشيوخ والتصنيفات
+  try {
+    const [sheikhs, cats] = await Promise.all([
+      dbGet('sheikhs', 'select=id,name&order=name'),
+      dbGet('categories', 'select=id,name&order=name')
+    ]);
+    const shSel = document.getElementById('bulk-sheikh');
+    shSel.innerHTML = '<option value="">— بدون شيخ —</option>' +
+      sheikhs.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+    const catSel = document.getElementById('bulk-category');
+    catSel.innerHTML = '<option value="">— بدون تصنيف —</option>' +
+      cats.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  } catch(e) {}
+  _bulkFiles = [];
+  document.getElementById('bulk-files-list').innerHTML = '';
+  document.getElementById('bulk-upload-btn').disabled = true;
+  document.getElementById('bulk-total-progress').style.display = 'none';
+  openModal('modal-bulk-upload');
+}
+// Override openModal call for bulk
+const _origOpenModal = window.openModal;
+window.openModal = function(id) {
+  if (id === 'modal-bulk-upload') { openBulkModal(); return; }
+  _origOpenModal(id);
+};
+
+function handleBulkDrop(e) {
+  const files = e.dataTransfer.files;
+  if (files) handleBulkFiles(files);
+}
+
+function handleBulkFiles(files) {
+  _bulkFiles = Array.from(files).filter(f => f.type.startsWith('audio/') || /\.(mp3|m4a|aac|ogg|wav|flac)$/i.test(f.name));
+  if (!_bulkFiles.length) { showToast('لم يتم العثور على ملفات صوتية', 'error'); return; }
+
+  const listEl = document.getElementById('bulk-files-list');
+  listEl.innerHTML = _bulkFiles.map((f, i) => `
+    <div id="bulk-item-${i}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:8px;margin-bottom:6px;font-size:13px">
+      <span style="color:var(--emerald-glow);font-size:16px">🎵</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(f.name)}</div>
+        <div style="color:var(--text-muted);font-size:11px">${(f.size/1024/1024).toFixed(1)} MB</div>
+      </div>
+      <span id="bulk-status-${i}" style="font-size:12px;color:var(--text-muted)">جاهز</span>
+    </div>
+  `).join('');
+
+  document.getElementById('bulk-upload-btn').disabled = false;
+}
+
+async function startBulkUpload() {
+  if (!_bulkFiles.length) return;
+  const btn = document.getElementById('bulk-upload-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="animation:spin .8s linear infinite;display:inline-block">↻</span> جارٍ الرفع...';
+
+  const sheikhId   = document.getElementById('bulk-sheikh').value || null;
+  const categoryId = document.getElementById('bulk-category').value || null;
+  const published  = document.getElementById('bulk-published').checked;
+
+  const progressWrap = document.getElementById('bulk-total-progress');
+  const progressBar  = document.getElementById('bulk-progress-bar');
+  const progressPct  = document.getElementById('bulk-progress-pct');
+  const progressLbl  = document.getElementById('bulk-progress-label');
+  progressWrap.style.display = 'block';
+
+  let done = 0, failed = 0;
+  for (let i = 0; i < _bulkFiles.length; i++) {
+    const f = _bulkFiles[i];
+    const statusEl = document.getElementById('bulk-status-' + i);
+    const itemEl   = document.getElementById('bulk-item-' + i);
+    if (statusEl) statusEl.textContent = 'جارٍ الرفع...';
+    progressLbl.textContent = `الملف ${i+1} من ${_bulkFiles.length}: ${f.name}`;
+
+    try {
+      // رفع الملف إلى Supabase Storage
+      const uploadKey = (typeof API_KEYS !== 'undefined' && API_KEYS.supabase_service) || SUPABASE_KEY;
+      const folder = 'bulk-' + Date.now();
+      const filePath = folder + '/' + f.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+
+      uploadToStorage._onProgress = pct => {
+        const overall = Math.round(((i + pct/100) / _bulkFiles.length) * 100);
+        progressBar.style.width = overall + '%';
+        progressPct.textContent = overall + '%';
+        if (statusEl) statusEl.textContent = pct + '%';
+      };
+
+      const audioUrl = await uploadToStorage('audio', f, folder);
+      uploadToStorage._onProgress = null;
+
+      // اسم الدرس من اسم الملف (بدون امتداد)
+      const title = f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+
+      // إنشاء سجل في قاعدة البيانات
+      await dbInsert('audios', {
+        title,
+        audio_url:    audioUrl,
+        sheikh_id:    sheikhId   ? parseInt(sheikhId)   : null,
+        category_id:  categoryId ? parseInt(categoryId) : null,
+        is_published: published,
+        play_count:   0
+      });
+
+      done++;
+      if (statusEl) { statusEl.textContent = '✅'; statusEl.style.color = 'var(--emerald-glow)'; }
+      if (itemEl)   itemEl.style.background = 'rgba(11,107,66,0.1)';
+    } catch(e) {
+      failed++;
+      uploadToStorage._onProgress = null;
+      if (statusEl) { statusEl.textContent = '❌'; statusEl.style.color = 'var(--danger)'; }
+      console.warn('Bulk upload error for', f.name, e.message);
+    }
+
+    const overall = Math.round(((i + 1) / _bulkFiles.length) * 100);
+    progressBar.style.width = overall + '%';
+    progressPct.textContent = overall + '%';
+  }
+
+  progressLbl.textContent = `اكتمل: ${done} نجح، ${failed} فشل`;
+  showToast(`تم رفع ${done} ملف بنجاح${failed ? ' ('+failed+' فشل)' : ''}`, done > 0 ? 'success' : 'error');
+
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg> رفع الكل';
+  btn.disabled = false;
+  if (done > 0) { loadAudios(); }
+}
