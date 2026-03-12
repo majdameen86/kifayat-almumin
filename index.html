@@ -392,38 +392,42 @@
     </div>
   </div>
   <div class="section">
-    <!-- Filters -->
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;align-items:center">
-      <div style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 14px;flex:1;min-width:200px">
-        <span class="ic" style="color:var(--text3)">🔍</span>
-        <input type="text" placeholder="البحث في التسجيلات..." style="border:none;background:none;font-family:'Tajawal',sans-serif;font-size:14px;color:var(--text);outline:none;flex:1">
+    <!-- Advanced Filters -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:24px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+        <!-- بحث -->
+        <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 14px;flex:2;min-width:200px">
+          <span class="ic" style="color:var(--text3)">🔍</span>
+          <input id="filter-search" type="text" placeholder="البحث في التسجيلات..." oninput="applyAudioFilters()" style="border:none;background:none;font-family:'Tajawal',sans-serif;font-size:14px;color:var(--text);outline:none;flex:1">
+        </div>
+        <!-- فلتر الشيخ -->
+        <select id="filter-sheikh" onchange="applyAudioFilters()" style="padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;flex:1;min-width:140px">
+          <option value="">👤 كل الشيوخ</option>
+        </select>
+        <!-- فلتر التصنيف -->
+        <select id="filter-category" onchange="applyAudioFilters()" style="padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;flex:1;min-width:140px">
+          <option value="">🏷 كل التصنيفات</option>
+        </select>
       </div>
-      <select style="padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none">
-        <option>كل التصنيفات</option>
-        <option>فقه</option><option>تفسير</option><option>عقيدة</option><option>سيرة</option><option>حديث</option>
-      </select>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <!-- فلتر المدة -->
+        <select id="filter-duration" onchange="applyAudioFilters()" style="padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;outline:none">
+          <option value="">⏱ أي مدة</option>
+          <option value="short">أقل من 30 دقيقة</option>
+          <option value="medium">30 – 60 دقيقة</option>
+          <option value="long">أكثر من 60 دقيقة</option>
+        </select>
+        <!-- الترتيب -->
+        <select id="filter-sort" onchange="applyAudioFilters()" style="padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;outline:none">
+          <option value="newest">🕐 الأحدث</option>
+          <option value="popular">🎧 الأكثر استماعاً</option>
+        </select>
+        <!-- إعادة تعيين -->
+        <button onclick="resetAudioFilters()" style="padding:9px 14px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text3);font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer">↺ إعادة تعيين</button>
+      </div>
     </div>
     <div class="audios-grid">
-      <div class="audio-card" onclick="showAudioDetail()">
-        <div class="audio-thumb"><div class="audio-thumb-inner">🎙</div><div class="audio-thumb-overlay"></div><div class="audio-play-btn"><span class="ic">▶</span></div><div class="audio-duration">45:23</div><div class="audio-cat"><span class="badge badge-green">حديث</span></div></div>
-        <div class="audio-body"><h3>شرح الأربعين النووية — الحديث الأول</h3><div class="audio-meta"><span><span class="ic">👤</span> الشيخ حسام دياب</span><span><span class="ic">🎧</span> 284</span></div></div>
-        <div class="audio-footer"><button class="btn-play-small" onclick="event.stopPropagation();showToast('يتم تحميل الدرس من قاعدة البيانات...','success')"><span class="ic">▶</span> استمع</button><button class="btn-download" onclick="event.stopPropagation();showToast('أضف الملف في لوحة التحكم أولاً','error')"><span class="ic">⬇</span></button></div>
-      </div>
-      <div class="audio-card">
-        <div class="audio-thumb" style="background:linear-gradient(135deg,#1a3a10,#0a200a)"><div class="audio-thumb-inner">📖</div><div class="audio-thumb-overlay"></div><div class="audio-play-btn"><span class="ic">▶</span></div><div class="audio-duration">1:12:40</div><div class="audio-cat"><span class="badge badge-gold">تفسير</span></div></div>
-        <div class="audio-body"><h3>تفسير سورة البقرة — الجزء الأول</h3><div class="audio-meta"><span><span class="ic">👤</span> الشيخ حسام دياب</span><span><span class="ic">🎧</span> 210</span></div></div>
-        <div class="audio-footer"><button class="btn-play-small" onclick="showToast('يتم تحميل الدرس من قاعدة البيانات...','success')"><span class="ic">▶</span> استمع</button><button class="btn-download" onclick="showToast('أضف الملف في لوحة التحكم أولاً','error')"><span class="ic">⬇</span></button></div>
-      </div>
-      <div class="audio-card">
-        <div class="audio-thumb" style="background:linear-gradient(135deg,#2a1a0a,#150d05)"><div class="audio-thumb-inner">🌙</div><div class="audio-thumb-overlay"></div><div class="audio-play-btn"><span class="ic">▶</span></div><div class="audio-duration">58:10</div><div class="audio-cat"><span class="badge badge-blue">عقيدة</span></div></div>
-        <div class="audio-body"><h3>فقه العبادات — الطهارة وأحكامها</h3><div class="audio-meta"><span><span class="ic">👤</span> الشيخ حسام دياب</span><span><span class="ic">🎧</span> 176</span></div></div>
-        <div class="audio-footer"><button class="btn-play-small" onclick="showToast('يتم تحميل الدرس من قاعدة البيانات...','success')"><span class="ic">▶</span> استمع</button><button class="btn-download" onclick="showToast('أضف الملف في لوحة التحكم أولاً','error')"><span class="ic">⬇</span></button></div>
-      </div>
-      <div class="audio-card">
-        <div class="audio-thumb" style="background:linear-gradient(135deg,#0a2030,#050f18)"><div class="audio-thumb-inner">🕌</div><div class="audio-thumb-overlay"></div><div class="audio-play-btn"><span class="ic">▶</span></div><div class="audio-duration">1:05:00</div><div class="audio-cat"><span class="badge badge-blue">سيرة</span></div></div>
-        <div class="audio-body"><h3>السيرة النبوية — حياة المصطفى ﷺ</h3><div class="audio-meta"><span><span class="ic">👤</span> الشيخ حسام دياب</span><span><span class="ic">🎧</span> 142</span></div></div>
-        <div class="audio-footer"><button class="btn-play-small" onclick="showToast('يتم تحميل الدرس من قاعدة البيانات...','success')"><span class="ic">▶</span> استمع</button><button class="btn-download" onclick="showToast('أضف الملف في لوحة التحكم أولاً','error')"><span class="ic">⬇</span></button></div>
-      </div>
+      <!-- تُملأ ديناميكياً -->
     </div>
   </div>
 </div>
@@ -644,10 +648,13 @@
     <!-- Controls -->
     <div class="player-controls">
       <div class="player-btns">
+        <button class="player-btn" id="player-prev-btn" onclick="playPrev()" title="الدرس السابق" style="display:none;font-size:13px">⏮</button>
         <button class="player-btn" onclick="skipAudio(-10)" title="10ث للخلف" style="font-size:11px;font-weight:700">↩10</button>
         <button class="player-btn player-btn-main" id="player-play-btn" onclick="togglePlay()">▶</button>
         <button class="player-btn" onclick="skipAudio(10)"  title="10ث للأمام" style="font-size:11px;font-weight:700">10↪</button>
+        <button class="player-btn" id="player-next-btn" onclick="playNext()" title="الدرس التالي" style="display:none;font-size:13px">⏭</button>
       </div>
+      <span id="player-playlist-counter" style="font-size:10px;color:var(--text3);margin-top:2px;display:block;text-align:center"></span>
     </div>
 
     <!-- Right: volume + speed + close -->
